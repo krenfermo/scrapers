@@ -266,7 +266,7 @@ if category in ["local","locales"]:
 
 
 
-query=sys.argv[3]
+query=sys.argv[3].replace(" ","-")
 if query is None:
     exit
     
