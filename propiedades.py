@@ -46,11 +46,14 @@ def navega_cada_pagina(pagina,op,cate):
 
 
 def OPERACION(soup,pagina,op,cate):
-    
-    precio = soup.find('span', class_='price')
+    try:
+        precio = soup.find('span', class_='price')
     #print(precio.text.lstrip().rstrip())
-    f.write("\""+precio.text.lstrip().rstrip()+"\",")
-    f.write("\""+op.replace("-","")+"\",")
+        f.write("\""+pagina.lstrip().rstrip()+"\",")
+        f.write("\""+precio.text.lstrip().rstrip()+"\",")
+        f.write("\""+op.replace("-","")+"\",")
+    except:
+        return False
     
     if cate in ["casas-en-condominio"]:
             file_catego="casas"
@@ -384,7 +387,7 @@ for op in operation:
             for item in list_url:
             
                         
-                f.write("\""+item.lstrip().rstrip()+"\",")
+                
                 navega_cada_pagina(item,op,cate)
 
 f.close() 
