@@ -125,3 +125,4 @@ dmypy.json
 .pyre/
 cIztacalco.csv
 PROPIEDADES_COM/comprar_casa_coapa_06_04_2020/comprar_casa.csv
+*.csv

@@ -337,7 +337,7 @@ for op in operation:
         Total_pages = soup.find('div', class_='title-result')
        
         Total_pages=Total_pages.find('span').text
-        #print(Total_pages)
+        print(str(Total_pages)+" resultados")
         Total_pages=int(Total_pages)/42
         #print(Total_pages)
         Total_pages=my_round(Total_pages+0.5)
