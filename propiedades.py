@@ -217,58 +217,50 @@ if opera in ["renta","rentar"]:
     operation=["-renta"]
         
 
-       
-category=sys.argv[2]
-
-
-if category in ["desarrollo","desarrollos"]:
-    categories=["desarrollos"]
-
-if category in ["departamento","departamentos"]:
-    categories=["departamentos"]
-
-if category in ["casa","casas"]:
-    categories=["casas"]
+if len(sys.argv)==2:
+    categories=["desarrollos","departamentos","casas","ranchos","terrenos-habitacionales","casas-en-condominio","oficinas","bodegas-comerciales","terrenos-comerciales","edificios","locales"]
+    query=sys.argv[2]
     
-if category in ["rancho","ranchos"]:
-    categories=["ranchos"]
+if len(sys.argv)==3:      
+    category=sys.argv[2]
+
+    if category in ["desarrollo","desarrollos"]:
+        categories=["desarrollos"]
+
+    if category in ["departamento","departamentos"]:
+        categories=["departamentos"]
+
+    if category in ["casa","casas"]:
+        categories=["casas"]
+        
+    if category in ["rancho","ranchos"]:
+        categories=["ranchos"]
 
 
-if category in ["terreno habitacional","terrenos habitacionales"]:
-    categories=["terrenos-habitacionales"]
-    
-if category in ["casas en condominio","condominio"]:
-    categories=["casas-en-condominio"]     
+    if category in ["terreno habitacional","terrenos habitacionales"]:
+        categories=["terrenos-habitacionales"]
+        
+    if category in ["casas en condominio","condominio"]:
+        categories=["casas-en-condominio"]     
 
 
+    if category in ["oficina","oficinas"]:
+        categories=["oficinas"]
 
+    if category in ["bodega"]:
+        categories=["bodegas-comerciales"]
 
-
-
-if category in ["oficina","oficinas"]:
-    categories=["oficinas"]
-
-if category in ["bodega"]:
-    categories=["bodegas-comerciales"]
-
-if category in ["terrenos comerciales","terreno comercial"]:
-    categories=["terrenos-comerciales"]
-    
-if category in ["edificio","edificios"]:
-    categories=["edificios"]
-    
-if category in ["local","locales"]:
-    categories=["locales"]
-    
-#
-
-
-
-
-
-query=sys.argv[3].replace(" ","-")
-if query is None:
-    exit
+    if category in ["terrenos comerciales","terreno comercial"]:
+        categories=["terrenos-comerciales"]
+        
+    if category in ["edificio","edificios"]:
+        categories=["edificios"]
+        
+    if category in ["local","locales"]:
+        categories=["locales"]
+        
+    query=sys.argv[3].replace(" ","-")
+ 
     
 # Asigna formato de ejemplo1
 formato1 = "%d_%m_%Y"

@@ -376,50 +376,50 @@ if opera in ["temporal"]:
 if opera in ["comercial"]:
     operation=["oficinas-"]      
 
-       
-category=sys.argv[2]
 
-if category in ["departamento","departamentos"]:
-    categories=["departamentos-"]
+if len(sys.argv)==2:
+    categories=["departamentos-","casas-o-duplex-o-casa-en-condominio-","casa-en-condominio-","oficinas-","locales-comerciales-","bodegas-comerciales-","terrenos-","otros-tipos-de-propiedades-","en-temporal-vacacional-","en-traspaso-"]
+    query=sys.argv[2]
+ 
+if len(sys.argv)==3:
+        
+    category=sys.argv[2]
 
-if category in ["casa","casas"]:
-    categories=["casas-o-duplex-o-casa-en-condominio-","casa-en-condominio-"]
+    if category in ["departamento","departamentos"]:
+        categories=["departamentos-"]
+
+    if category in ["casa","casas"]:
+        categories=["casas-o-duplex-o-casa-en-condominio-","casa-en-condominio-"]
+        
+    if category in ["oficina","oficinas"]:
+        categories=["oficinas-"]
+
+    if category in ["local","local comercial"]:
+        categories=["locales-comerciales-"]
+
+    if category in ["bodega","bodega comercial","bodegas","bodegas comerciales"]:
+        categories=["bodegas-comerciales-"]
+        
+    if category in ["terrenos","terreno"]:
+        categories=["terrenos-"]     
+
+    if category in ["otros"]:
+        categories=["otros-tipos-de-propiedades-"]
+        
+    if category in ["comprar","compra"]:
+        categories=["en-venta-"]
+        
+    if category in ["renta","rentar"]:
+        categories=["en-renta-"]
+
+    if category in ["temporal","vacacional","temporal vacacional"]:
+        categories=["en-temporal-vacacional-"]
+
+    if category in ["remate","remates"]:
+        categories=["en-traspaso-"]
+        
+    query=sys.argv[3]
     
-if category in ["oficina","oficinas"]:
-    categories=["oficinas-"]
-
-if category in ["local","local comercial"]:
-    categories=["locales-comerciales-"]
-
-if category in ["bodega","bodega comercial","bodegas","bodegas comerciales"]:
-    categories=["bodegas-comerciales-"]
-    
-if category in ["terrenos","terreno"]:
-    categories=["terrenos-"]     
-
-if category in ["otros"]:
-    categories=["otros-tipos-de-propiedades-"]
-     
-if category in ["comprar","compra"]:
-    categories=["en-venta-"]
-    
-if category in ["renta","rentar"]:
-    categories=["en-renta-"]
-
-if category in ["temporal","vacacional","temporal vacacional"]:
-    categories=["en-temporal-vacacional-"]
-
-if category in ["remate","remates"]:
-    categories=["en-traspaso-"]
-#
-
-
-
-
-
-query=sys.argv[3]
-if query is None:
-    exit
     
 # Asigna formato de ejemplo1
 formato1 = "%d_%m_%Y"
