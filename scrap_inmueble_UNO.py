@@ -377,11 +377,12 @@ if opera in ["comercial"]:
     operation=["oficinas-"]      
 
 
-if len(sys.argv)==2:
+if len(sys.argv)==3:
     categories=["departamentos-","casas-o-duplex-o-casa-en-condominio-","casa-en-condominio-","oficinas-","locales-comerciales-","bodegas-comerciales-","terrenos-","otros-tipos-de-propiedades-","en-temporal-vacacional-","en-traspaso-"]
     query=sys.argv[2]
+    category="TODO"
  
-if len(sys.argv)==3:
+if len(sys.argv)==4:
         
     category=sys.argv[2]
 

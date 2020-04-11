@@ -217,11 +217,12 @@ if opera in ["renta","rentar"]:
     operation=["-renta"]
         
 
-if len(sys.argv)==2:
+if len(sys.argv)==3:
     categories=["desarrollos","departamentos","casas","ranchos","terrenos-habitacionales","casas-en-condominio","oficinas","bodegas-comerciales","terrenos-comerciales","edificios","locales"]
     query=sys.argv[2]
+    category="TODO"
     
-if len(sys.argv)==3:      
+if len(sys.argv)==4:      
     category=sys.argv[2]
 
     if category in ["desarrollo","desarrollos"]:
@@ -275,8 +276,10 @@ if os.path.exists(path):
 else:
      
     os.mkdir(path)
+
     
 path=str(Path().absolute())+"\\PROPIEDADES_COM\\"+str(opera)+"_"+str(category)+"_"+str(query)+"_"+hoy
+
 print(path)
 if os.path.exists(path):
     print("CARPETA YA EXISTIA Y NO LA CREA")
@@ -331,7 +334,7 @@ for op in operation:
             continue
         Total_pages = soup.find('div', class_='title-result')
        
-        Total_pages=Total_pages.find('span').text
+        Total_pages=Total_pages.find('span').text.replace(",","")
         print(str(Total_pages)+" resultados")
         Total_pages=int(Total_pages)/42
         #print(Total_pages)
