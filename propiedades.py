@@ -59,7 +59,7 @@ def OPERACION(soup,pagina,op,cate):
             file_catego="casas"
     else:
             file_catego=cate
-    f.write(file_catego+",")
+    f.write("\""+file_catego+"\",")
     
     
     nombre = soup.find('h1', class_='title-gallery').find('em')
@@ -218,6 +218,7 @@ if opera in ["renta","rentar"]:
         
 
 if len(sys.argv)==3:
+    print("BUSCA EN TODOS LOS TIPOS DE LAS PROPIEDADES")
     categories=["desarrollos","departamentos","casas","ranchos","terrenos-habitacionales","casas-en-condominio","oficinas","bodegas-comerciales","terrenos-comerciales","edificios","locales"]
     query=sys.argv[2]
     category="TODO"
@@ -301,26 +302,7 @@ f.write("\"URL\","+"\"PRECIO\","+"\"TIPO\","+"\"CATEGORIA\","+"\"NOMBRE\","+"\"D
 for op in operation:
    
     for cate in categories:
-        '''
-        if cate=="bodegas-comerciales-" and op=="desarrollos-":
-            continue
-        if cate=="desarrollos-" and op=="oficinas-":
-            continue
-        print (cate+" "+op)
-        
-        if cate=="casas-o-duplex-o-casa-en-condominio-" or op=="duplex-o-casa-en-condominio-o-casas-":
-            file_catego="casas-"
-        else:
-            file_catego=cate
-        file_op=""
-        if op=="en-temporal-vacacional-":
-            file_op="temporal"
-        if op=="en-venta-incluir-comercializa-remates-publisher-":
-            file_op="remates"
-        if file_op=="":
-            file_op=op
-        ''' 
-            
+ 
             
         #print(path+"\\"+file_op+file_catego+".csv")    
         counter=1
@@ -380,9 +362,7 @@ for op in operation:
                 counter+=1
          
             for item in list_url:
-            
-                        
-                
+               
                 navega_cada_pagina(item,op,cate)
 
 f.close() 
