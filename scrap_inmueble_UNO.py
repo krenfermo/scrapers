@@ -68,6 +68,26 @@ def navega_cada_pagina(pagina,cate):
         preventa(soup,pagina,cate)
         
 
+def normalize(s):
+    replacements = (
+        ("á", "a"),
+        ("é", "e"),
+        ("í", "i"),
+        ("ó", "o"),
+        ("ú", "u"),
+        ("Á", "A"),
+        ("É", "E"),
+        ("Í", "I"),
+        ("Ó", "O"),
+        ("Ú", "U"),
+        ("Ñ", "N"),
+        ("ñ", "n"),
+        ("Ü", "U"),
+        ("ü", "u"),
+    )
+    for a, b in replacements:
+        s = s.replace(a, b).replace(a.upper(), b.upper())
+    return s
 
 
 
@@ -75,7 +95,8 @@ def venta(soup,pagina,cate):
     
     precio = soup.find('div', class_='price-items')
     #print(precio.text.lstrip().rstrip())
-    f.write("\""+precio.text.lstrip().rstrip()+"\",")
+    
+    f.write("\""+precio.text.lstrip().rstrip().replace("MN","")+"\",")
     f.write("\"Venta\",")
     
     if cate in ["casas-o-duplex-o-casa-en-condominio-","casa-en-condominio-"]:
@@ -93,7 +114,7 @@ def venta(soup,pagina,cate):
         for item in nombre:
             name+=item.capitalize()+" " 
         #f.write(name.lstrip().rstrip()+"|")
-        f.write("\""+name.lstrip().rstrip()+"\",")
+        f.write("\""+normalize(str(name.lstrip().rstrip()))+"\",")
         #print(nombre.text.lstrip().rstrip())
     else:
         
@@ -101,7 +122,7 @@ def venta(soup,pagina,cate):
         nombre=nombre.text.lstrip().rstrip()
         nombre=nombre.replace(",","")
         nombre=nombre.replace("\"","")
-        f.write("\""+nombre+"\",")
+        f.write("\""+normalize(str(nombre))+"\",")
         #f.write("\""+nombre.text.lstrip().rstrip()+"\",")
         
     Descripcion = soup.find('div', id='verDatosDescripcion')    
@@ -109,7 +130,7 @@ def venta(soup,pagina,cate):
     #f.write(Descripcion.text+"|")
     Descripcion=Descripcion.text
     Descripcion=Descripcion.replace("\"","")
-    f.write("\""+Descripcion+"\",")
+    f.write("\""+normalize(str(Descripcion))+"\",")
     #f.write("\""+Descripcion.text+"\",")
     
     status = soup.find('ul', class_='section-icon-features')
@@ -153,7 +174,7 @@ def venta(soup,pagina,cate):
         
         
         if "Recámaras" in str(dato):
-            Recamaras=str(dato)
+            Recamaras=str(dato) 
         
 
          
@@ -165,7 +186,7 @@ def venta(soup,pagina,cate):
  
     #print("\""+str(terreno)+"\","+"\""+str(construidos)+"\","+"\""+str(banios)+"\","+"\""+str(estacionamientos)+"\","+"\""+str(Recamaras)+"\","+"\""+str(Medios)+"\","+"\""+str(Antiguedad)+"\",")    
     items_data="\""+str(terreno)+"\","+"\""+str(construidos)+"\","+"\""+str(banios)+"\","+"\""+str(estacionamientos)+"\","+"\""+str(Recamaras)+"\","+"\""+str(Medios)+"\","+"\""+str(Antiguedad)+"\","
-    f.write(items_data)
+    f.write(normalize(str(items_data)).replace("Recamaras","").replace("Recamara","").replace("Banos","").replace("Bano","").replace("Medios","").replace("Medio",""))
         
     calle="None"
     colonia="None"
@@ -192,7 +213,7 @@ def venta(soup,pagina,cate):
         delegacion=location[2]
         ciudad=location[3]
         items_data2="\""+str(calle)+"\","+"\""+str(colonia)+"\","+"\""+str(delegacion)+"\","+"\""+str(ciudad)+"\","
-    f.write(items_data2)
+    f.write(normalize(str(items_data2)))
     
     #f.write("\""+location+"\",")
     publicado=soup.find('h5',class_='section-date css-float-r')
@@ -206,7 +227,7 @@ def venta(soup,pagina,cate):
         publicado="None"
     #print (publicado)
     publicado=publicado.replace("Publicado hace","").lstrip().rstrip()
-    f.write("\""+publicado+"\"\n")
+    f.write("\""+normalize(str(publicado))+"\"\n")
 
 
 
@@ -216,7 +237,8 @@ def preventa(soup,pagina,cate):
     precio = soup.find('span', class_='data-price')
     #print(precio.text.lstrip().rstrip())
     #f.write(precio.text.lstrip().rstrip()+"|")
-    f.write("\""+precio.text.lstrip().rstrip()+"\",")
+    
+    f.write("\""+normalize(str(precio.text.lstrip().rstrip().replace("MN","")))+"\",")
     f.write("\"Preventa\",")
     
     if cate in ["casas-o-duplex-o-casa-en-condominio-","casa-en-condominio-"]:
@@ -231,14 +253,14 @@ def preventa(soup,pagina,cate):
     nombre=nombre.text.lstrip().rstrip()
     nombre=nombre.replace(",","")
     nombre=nombre.replace("\"","")
-    f.write("\""+nombre+"\",")
+    f.write("\""+normalize(str(nombre))+"\",")
     
     Descripcion = soup.find('div', id='verDatosDescripcion')
     #print(Descripcion.text)
     #f.write(Descripcion.text+"|")
     Descripcion=Descripcion.text
     Descripcion=Descripcion.replace("\"","")
-    f.write("\""+Descripcion+"\",")
+    f.write("\""+normalize(str(Descripcion))+"\",")
     
     
     status = soup.find('div', class_='status-columns')
@@ -306,7 +328,7 @@ def preventa(soup,pagina,cate):
             #f.write("\""+datos+"\",")
     
     items_data="\""+str(terreno)+"\","+"\""+str(construidos)+"\","+"\""+str(banios)+"\","+"\""+str(estacionamientos)+"\","+"\""+str(Recamaras)+"\","+"\""+str(Medios)+"\","+"\""+str(Antiguedad)+"\","
-    f.write(items_data)
+    f.write(normalize(str(items_data)).replace("Recamaras","").replace("Recamara","").replace("Banos","").replace("Bano","").replace("Medios","").replace("Medio",""))
     
     
     calle="None"
@@ -335,21 +357,12 @@ def preventa(soup,pagina,cate):
         delegacion=location[2]
         ciudad=location[3]
         items_data2="\""+str(calle)+"\","+"\""+str(colonia)+"\","+"\""+str(delegacion)+"\","+"\""+str(ciudad)+"\","
-    f.write(items_data2)
+    f.write(normalize(str(items_data2)))
     
-    #f.write("\""+location+"\",")
-    
-    #static_map=soup.find('img',id='static-map')
-    #print(static_map['src'])
-    #f.write(static_map['src']+"\n")
-    #f.write("\""+static_map['src']+"\"\n")
+
     f.write("\"None\"\n")
     
-    
-    
-    #elements = results.select('div[class*="posting-card"]')
-    #return elements,soup
-
+ 
 
 
 #python3 scrap_uno.py "comprar" "departamento" "narvarte"
@@ -421,7 +434,7 @@ if len(sys.argv)==4:
         
     query=sys.argv[3]
     
-    
+   
 # Asigna formato de ejemplo1
 formato1 = "%d_%m_%Y"
 hoy = datetime.today()  # Asigna fecha-hora
@@ -429,13 +442,24 @@ hoy = datetime.today()  # Asigna fecha-hora
 hoy = hoy.strftime(formato1)  
 #print("File      Path:", Path(__file__).absolute())
 #print("Directory Path:", Path().absolute())  
-path=str(Path().absolute())+"\\"+str(opera)+"_"+str(category)+"_"+str(query)+"_"+hoy
+path=str(Path().absolute())+"\\INMUEBLES24\\"
+if os.path.exists(path):
+    pass
+else:
+     
+    os.mkdir(path)
+
+    
+path=str(Path().absolute())+"\\INMUEBLES24\\"+str(opera)+"_"+str(category)+"_"+str(query)+"_"+hoy
+
 print(path)
 if os.path.exists(path):
     print("CARPETA YA EXISTIA Y NO LA CREA")
 else:
     print("CARPETA CREADA")
     os.mkdir(path)
+
+
 
 f= open(path+"\\"+opera+"_"+category+".csv","w+")
         								                                                                                                                                			

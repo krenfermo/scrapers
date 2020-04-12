@@ -39,7 +39,28 @@ def navega_cada_pagina(pagina,op,cate):
        venta(soup,pagina,op,cate)
         
 
+    
 
+def normalize(s):
+    replacements = (
+        ("á", "a"),
+        ("é", "e"),
+        ("í", "i"),
+        ("ó", "o"),
+        ("ú", "u"),
+        ("Á", "A"),
+        ("É", "E"),
+        ("Í", "I"),
+        ("Ó", "O"),
+        ("Ú", "U"),
+        ("Ñ", "N"),
+        ("ñ", "n"),
+        ("Ü", "U"),
+        ("ü", "u"),
+    )
+    for a, b in replacements:
+        s = s.replace(a, b).replace(a.upper(), b.upper())
+    return s
 
 
 def venta(soup,pagina,op,cate):
@@ -64,7 +85,7 @@ def venta(soup,pagina,op,cate):
     nombre=nombre.text.lstrip().rstrip()
     nombre=nombre.replace(",","")
     nombre=nombre.replace("\"","")
-    f.write("\""+nombre+"\",")
+    f.write("\""+normalize(str(nombre))+"\",")
     #f.write("\""+nombre.text.lstrip().rstrip()+"\",")
     
     try:    
@@ -78,7 +99,7 @@ def venta(soup,pagina,op,cate):
    
      
     Descripcion=Descripcion.replace("\"","")
-    f.write("\""+Descripcion+"\",")
+    f.write("\""+normalize(str(Descripcion))+"\",")
     #f.write("\""+Descripcion.text+"\",")
     
     status = soup.find('ul', class_='specs-list')
@@ -132,7 +153,7 @@ def venta(soup,pagina,op,cate):
          
      
     items_data="\""+str(terreno)+"\","+"\""+str(construidos)+"\","+"\""+str(banios)+"\","+"\""+str(estacionamientos)+"\","+"\""+str(Recamaras)+"\","+"\""+str("None")+"\","+"\""+str("None")+"\","
-    f.write(items_data)
+    f.write(normalize(str(items_data)))
         
      
     colonia="None"
@@ -167,7 +188,7 @@ def venta(soup,pagina,op,cate):
         items_data2="\""+str(calle)+"\","+"\""+str(colonia)+"\","+"\""+str(delegacion)+"\","+"\""+str(ciudad)+"\","
     
     
-    f.write(items_data2)
+    f.write(normalize(str(items_data2)))
     f.write("\"None\",")
     f.write("\n")
     #exit()

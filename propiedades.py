@@ -41,7 +41,28 @@ def navega_cada_pagina(pagina,op,cate):
     OPERACION(soup,pagina,op,cate)
      
         
+    
 
+def normalize(s):
+    replacements = (
+        ("á", "a"),
+        ("é", "e"),
+        ("í", "i"),
+        ("ó", "o"),
+        ("ú", "u"),
+        ("Á", "A"),
+        ("É", "E"),
+        ("Í", "I"),
+        ("Ó", "O"),
+        ("Ú", "U"),
+        ("Ñ", "N"),
+        ("ñ", "n"),
+        ("Ü", "U"),
+        ("ü", "u"),
+    )
+    for a, b in replacements:
+        s = s.replace(a, b).replace(a.upper(), b.upper())
+    return s
 
 
 
@@ -50,7 +71,7 @@ def OPERACION(soup,pagina,op,cate):
         precio = soup.find('span', class_='price')
     #print(precio.text.lstrip().rstrip())
         f.write("\""+pagina.lstrip().rstrip()+"\",")
-        f.write("\""+precio.text.lstrip().rstrip()+"\",")
+        f.write("\""+precio.text.lstrip().rstrip().replace("$","")+"\",")
         f.write("\""+op.replace("-","")+"\",")
     except:
         return False
@@ -69,7 +90,8 @@ def OPERACION(soup,pagina,op,cate):
     nombre=nombre.text.lstrip().rstrip()
     nombre=nombre.replace(",","")
     nombre=nombre.replace("\"","")
-    f.write("\""+nombre+"\",")
+    
+    f.write("\""+normalize(str(nombre))+"\",")
   
         
     Descripcion = soup.find('div', class_='subsection-content').find_all('p')    
@@ -114,7 +136,7 @@ def OPERACION(soup,pagina,op,cate):
             Descripcion=Descripcion.replace(a,"").replace(b,"").replace(c,"").replace("!","").replace("¡","").replace("\"","")
             #print(Descripcion)
             try:
-                f.write("\""+str(Descripcion)+"\",")
+                f.write("\""+normalize(str(Descripcion))+"\",")
             except:
                 bandera=True    
             break
@@ -122,7 +144,7 @@ def OPERACION(soup,pagina,op,cate):
     
     if bandera   :
         Descripcion="None"
-        f.write("\""+Descripcion+"\",")
+        f.write("\""+normalize(str(Descripcion))+"\",")
    
     
     status = soup.find('ul', class_='carac-large')
@@ -171,7 +193,7 @@ def OPERACION(soup,pagina,op,cate):
  
     #print("\""+str(terreno)+"\","+"\""+str(construidos)+"\","+"\""+str(banios)+"\","+"\""+str(estacionamientos)+"\","+"\""+str(Recamaras)+"\","+"\""+str(Medios)+"\","+"\""+str(Antiguedad)+"\",")    
     items_data="\""+str(terreno)+"\","+"\""+str(construidos)+"\","+"\""+str(banios)+"\","+"\""+str(estacionamientos)+"\","+"\""+str(Recamaras)+"\","+"\""+str(Medios)+"\","+"\""+str(Antiguedad)+"\","
-    f.write(items_data)
+    f.write(normalize(str(items_data)))
  
     calle="None"
     colonia="None"
@@ -184,7 +206,7 @@ def OPERACION(soup,pagina,op,cate):
     #location=location.split(",")
     #print(location)
     items_data2="\""+str(calle)+"\","+"\""+str(location[0]).replace("\n","").replace("<span>","").replace("</span>","").replace(",","")+"\","+"\""+str(location[2]).replace("\n","").replace("<span>","").replace("</span>","").replace(",","").replace("\"","").replace("<span itemprop=addressLocality","").replace(">","")+"\","+"\""+str(location[5]).replace("\n","").replace("<span>","").replace("</span>","").replace(",","").replace("\"","").replace("<span itemprop=addressRegion","").replace(">","")+"\","
-    f.write(items_data2)
+    f.write(normalize(str(items_data2)))
      
     #f.write("\""+location+"\",")
     publicado=soup.find('p',class_='info-update')
@@ -197,7 +219,7 @@ def OPERACION(soup,pagina,op,cate):
         publicado="None"
     #print (publicado)
     publicado=publicado.replace("Propiedad actualizada el:","").lstrip().rstrip()
-    f.write("\""+publicado+"\"\n")
+    f.write("\""+normalize(str(publicado))+"\"\n")
     #exit()
     
 
