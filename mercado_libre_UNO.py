@@ -82,49 +82,53 @@ def venta(soup,pagina,op,cate):
     #f.write("\""+Descripcion.text+"\",")
     
     status = soup.find('ul', class_='specs-list')
-    columns = status.find_all('li', class_='specs-item')
+    try:
+        columns = status.find_all('li', class_='specs-item')
+    except:
+        pass
     terreno="None"
     construidos="None"
     banios="None"
     estacionamientos="None"
     Recamaras="None"
      
-    
-    for column in columns:
-        #column=str(column).replace('<br>','')
-        #print("XXX"+str(column.text.strip()))
-        dato=column.find('strong').text +" "+column.find('span').text
-        #print(dato)
-        
-        
-        #f.write(str(dato)+"|")
-        
-        if "total" in str(dato):
-            terreno=str(dato).split("m")            
-            terreno=terreno[0].split(" ")
-            terreno= str(terreno[-2].lstrip().rstrip())
-             
-      
-        if "construida" in str(dato):          
+    try:
+        for column in columns:
+            #column=str(column).replace('<br>','')
+            #print("XXX"+str(column.text.strip()))
+            dato=column.find('strong').text +" "+column.find('span').text
+            #print(dato)
             
             
-            construidos=str(dato).split("m")            
-            construidos=construidos[0].split(" ")
-            construidos= str(construidos[-2].lstrip().rstrip())
+            #f.write(str(dato)+"|")
             
+            if "total" in str(dato):
+                terreno=str(dato).split("m")            
+                terreno=terreno[0].split(" ")
+                terreno= str(terreno[-2].lstrip().rstrip())
                 
-        if "Baño" in str(dato):         
-            banios=str(dato).replace("Baños","").replace("Baño","")
         
-        
-        if "Estacionamiento" in str(dato):
-            estacionamientos=str(dato).replace("Estacionamientos","").replace("Estacionamiento","")
-        
-        
-        if "Recámaras" in str(dato):
-            Recamaras=str(dato).replace("Recámaras","").replace("Recámara","")
-        
-
+            if "construida" in str(dato):          
+                
+                
+                construidos=str(dato).split("m")            
+                construidos=construidos[0].split(" ")
+                construidos= str(construidos[-2].lstrip().rstrip())
+                
+                    
+            if "Baño" in str(dato):         
+                banios=str(dato).replace("Baños","").replace("Baño","")
+            
+            
+            if "Estacionamiento" in str(dato):
+                estacionamientos=str(dato).replace("Estacionamientos","").replace("Estacionamiento","")
+            
+            
+            if "Recámaras" in str(dato):
+                Recamaras=str(dato).replace("Recámaras","").replace("Recámara","")
+            
+    except:
+        pass
          
      
     items_data="\""+str(terreno)+"\","+"\""+str(construidos)+"\","+"\""+str(banios)+"\","+"\""+str(estacionamientos)+"\","+"\""+str(Recamaras)+"\","+"\""+str("None")+"\","+"\""+str("None")+"\","
@@ -199,12 +203,12 @@ if opera in ["renta","rentar"]:
 if len(sys.argv)==3:
     print("BUSCA EN TODOS LOS TIPOS DE LAS PROPIEDADES")
     categories=["casas/","departamentos/","terrenos/","oficinas/","edificios/","locales-comerciales/","bodegas/"]
-    query=sys.argv[2]
+    query=sys.argv[2].replace(" ","-")
     category="TODO"
     
-if len(sys.argv)==4:      
+if len(sys.argv)==4 or len(sys.argv)==5:      
     category=sys.argv[2]
- 
+    categories=""
 
     if category in ["departamento","departamentos"]:
         categories=["departamentos/"]
@@ -232,10 +236,16 @@ if len(sys.argv)==4:
         categories=["locales-comerciales/"]
         
     query=sys.argv[3].replace(" ","-")
+    print("llega")
+    if categories=="":
+        categories=["casas/","departamentos/","terrenos/","oficinas/","edificios/","locales-comerciales/","bodegas/"]
+    
+        
    # catego opera   query   
    #/casas/venta/comprar-colonia-del-valle
    
-   
+     
+ 
     
 print("args: "+ str(len(sys.argv)))
    
@@ -275,10 +285,12 @@ for op in operation:
    
     for cate in categories: 
         print("OPERACION: " +str(op)+ " CATEGORIA: "+ str(cate))
-        URL='https://inmuebles.mercadolibre.com.mx/'+str(cate)+str(op)+'distrito-federal/'+str(query)
+        if len(sys.argv)<5:  
+            URL='https://inmuebles.mercadolibre.com.mx/'+str(cate)+str(op)+'distrito-federal/'+str(query)
 
-
-        #print(URL)      
+        if len(sys.argv)==5: 
+            URL='https://inmuebles.mercadolibre.com.mx/'+str(cate)+str(op)+'distrito-federal/'+str(query)+"/"+str(sys.argv[4].replace(" ","-"))+"/"
+           
         elements,soup=navega_page(URL)
 
         #no_results=soup.find('div', class_='no-results__message')
@@ -297,7 +309,7 @@ for op in operation:
         Total_pages=my_round(Total_pages+0.5)
 
 
-        print(Total_pages)
+        print(str(Total_pages) + "paginas")
 
 
 
