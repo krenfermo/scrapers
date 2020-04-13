@@ -445,7 +445,7 @@ URL=sys.argv[1]
     
    
 # Asigna formato de ejemplo1
-formato1 = "%d_%m_%Y"
+formato1 = "%Y-%m-%d %H_%M_%S"
 hoy = datetime.today()  # Asigna fecha-hora
 # Aplica formato ejemplo1
 hoy = hoy.strftime(formato1)  
