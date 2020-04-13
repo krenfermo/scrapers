@@ -16,6 +16,11 @@ def my_round(i):
     return f if i - f < 0.5 else f+1
 
 def navega_page(pagina_numero,catego,op,query):
+    
+    #if len(sys.argv)==3:
+        #https://propiedades.com/la-magdalena-contreras/desarrollos-venta
+        
+    
     URL = 'https://www.propiedades.com/'+str(query)+'/'+catego+op+"?pagina="+str(pagina_numero)
     print(URL)
     headers = {'User-Agent': 'Mozilla/5.0'}
@@ -242,7 +247,8 @@ if opera in ["renta","rentar"]:
 if len(sys.argv)==3:
     print("BUSCA EN TODOS LOS TIPOS DE LAS PROPIEDADES")
     categories=["desarrollos","departamentos","casas","ranchos","terrenos-habitacionales","casas-en-condominio","oficinas","bodegas-comerciales","terrenos-comerciales","edificios","locales"]
-    query=sys.argv[2]
+    query=sys.argv[2].replace(" ","-")
+    query=query.replace("magdalena-contreras","la-magdalena-contreras")
     category="TODO"
     
 if len(sys.argv)==4:      
@@ -284,7 +290,7 @@ if len(sys.argv)==4:
         categories=["locales"]
         
     query=sys.argv[3].replace(" ","-")
- 
+    query=query.replace("magdalena-contreras","la-magdalena-contreras")
     
 # Asigna formato de ejemplo1
 formato1 = "%d_%m_%Y"
@@ -332,22 +338,23 @@ for op in operation:
         
            
         soup=navega_page(str(counter),cate,op,query)
+        try:    
+            no_results=soup.find('div', class_='content-errors')
+            if no_results!=None:
+                continue
+            Total_pages = soup.find('div', class_='title-result')
         
-        no_results=soup.find('div', class_='content-errors')
-        if no_results!=None:
+            Total_pages=Total_pages.find('span').text.replace(",","")
+            print(str(Total_pages)+" resultados")
+            Total_pages=int(Total_pages)/42
+            #print(Total_pages)
+            Total_pages=my_round(Total_pages+0.5)
+
+
+            print(str(Total_pages) + " paginas" )
+            
+        except:
             continue
-        Total_pages = soup.find('div', class_='title-result')
-       
-        Total_pages=Total_pages.find('span').text.replace(",","")
-        print(str(Total_pages)+" resultados")
-        Total_pages=int(Total_pages)/42
-        #print(Total_pages)
-        Total_pages=my_round(Total_pages+0.5)
-
-
-        print(str(Total_pages) + " paginas" )
-         
-
         
         
         for pages in range(1,Total_pages+1) :
