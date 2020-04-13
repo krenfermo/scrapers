@@ -40,7 +40,10 @@ def my_round(i):
     return f if i - f < 0.5 else f+1
 
 def navega_page(pagina_numero,catego,op,query):
-    URL = 'https://www.inmuebles24.com/'+catego+op+'q-'+str(query)+'.html'
+    if len(sys.argv)<=4:
+        URL = 'https://www.inmuebles24.com/'+catego+op+'en-'+str(query)+'.html'
+    else:
+        URL = 'https://www.inmuebles24.com/'+catego+op+'q-'+str(query)+'.html'
     print(URL)
     headers = {'User-Agent': 'Mozilla/5.0'}
 
@@ -512,10 +515,11 @@ for op in operation:
         Total_pages = soup.find('h1', class_='list-result-title')
         #print(Total_pages)
         Total_pages=str(Total_pages).replace('<h1 class="list-result-title">', '').replace('</h1>', '')
-        #print(Total_pages)
+       
         Total_pages=str(Total_pages).split()
         #print(Total_pages)
         Total_pages=str(Total_pages[0]).replace('<b>','').replace(',','')
+        print(str(Total_pages)+" Resultados")
         #print(Total_pages)
         Total_pages=int(Total_pages)/20
         #print(Total_pages)
@@ -528,10 +532,18 @@ for op in operation:
         
         for pages in range(1,Total_pages+1) :
             list_url=list()
-            if op in ["desarrollos-","oficinas-"]:
-                URL = 'https://www.inmuebles24.com/'+op+"o-"+cate+'pagina-'+str(pages)+'-q-'+str(query)+'.html'
-            else:    
-                URL = 'https://www.inmuebles24.com/'+cate+op+'pagina-'+str(pages)+'-q-'+str(query)+'.html'
+            print(len(sys.argv))
+            if len(sys.argv)<=4:
+                if op in ["desarrollos-","oficinas-"]:
+                    URL = 'https://www.inmuebles24.com/'+op+"o-"+cate+'pagina-'+str(pages)+'-en-'+str(query)+'.html'
+                else:    
+                    URL = 'https://www.inmuebles24.com/'+cate+op+'pagina-'+str(pages)+'-en-'+str(query)+'.html'
+            else:
+                if op in ["desarrollos-","oficinas-"]:
+                    URL = 'https://www.inmuebles24.com/'+op+"o-"+cate+'pagina-'+str(pages)+'-q-'+str(query)+'.html'
+                else:    
+                    URL = 'https://www.inmuebles24.com/'+cate+op+'pagina-'+str(pages)+'-q-'+str(query)+'.html'  
+                
             print(str(pages)+ "  "+URL)
             #f.write(URL+"|")
             headers = {'User-Agent': 'Mozilla/5.0'}
