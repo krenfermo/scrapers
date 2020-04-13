@@ -249,6 +249,21 @@ if len(sys.argv)==3:
     categories=["desarrollos","departamentos","casas","ranchos","terrenos-habitacionales","casas-en-condominio","oficinas","bodegas-comerciales","terrenos-comerciales","edificios","locales"]
     query=sys.argv[2].replace(" ","-")
     query=query.replace("magdalena-contreras","la-magdalena-contreras")
+    query=query.replace("alvaro obregon","alvaro-obregon-df")
+    query=query.replace("benito juarez","benito-juarez-df")
+    query=query.replace("cuajimalpa de morelos","cuajimalpa-de-morelos")
+    query=query.replace("cuajimalpa","cuajimalpa-de-morelos")
+    query=query.replace("cuauhtemoc","cuauhtemoc-df")
+    query=query.replace("gustavo a madero","gustavo-a-madero")
+    query=query.replace("venustiano carranza","venustiano-carranza-df")
+    
+    
+    #
+    #
+    
+    #
+    
+    #
     category="TODO"
     
 if len(sys.argv)==4:      
@@ -291,6 +306,14 @@ if len(sys.argv)==4:
         
     query=sys.argv[3].replace(" ","-")
     query=query.replace("magdalena-contreras","la-magdalena-contreras")
+
+    query=query.replace("alvaro obregon","alvaro-obregon-df")
+    query=query.replace("benito juarez","benito-juarez-df")
+    query=query.replace("cuajimalpa de morelos","cuajimalpa-de-morelos")
+    query=query.replace("cuajimalpa","cuajimalpa-de-morelos")
+    query=query.replace("cuauhtemoc","cuauhtemoc-df")
+    query=query.replace("gustavo a madero","gustavo-a-madero")
+    query=query.replace("venustiano carranza","venustiano-carranza-df")
     
 # Asigna formato de ejemplo1
 formato1 = "%d_%m_%Y"
