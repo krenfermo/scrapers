@@ -81,7 +81,7 @@ def venta(soup,pagina):
     
     file_catego="None"
     if "casa" in pagina:
-        file_catego="Casas"
+        file_catego="Casa"
     elif "departamento" in pagina:
         file_catego="Departamento"
     
@@ -396,7 +396,7 @@ def cuerpo(URL):
         URL2=URL
         URL2=URL2.replace(".html","-pagina-"+str(pages)+".html")
             
-        print(str(pages)+ "  "+URL2)
+        print("PAGINA:"+ str(pages))
         #f.write(URL+"|")
         headers = {'User-Agent': 'Mozilla/5.0'}
         page = requests.get(URL2, headers=headers)
