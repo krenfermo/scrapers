@@ -88,19 +88,22 @@ def OPERACION(soup,pagina):
             
 
     
-    
-    nombre = soup.find('h1', class_='title-gallery').find('em')
-       
-        #f.write(nombre.text.lstrip().rstrip()+"|")
-    nombre=nombre
-    nombre=nombre.text.lstrip().rstrip()
-    nombre=nombre.replace(",","")
-    nombre=nombre.replace("\"","")
-    
+    try:
+        nombre = soup.find('h1', class_='title-gallery').find('em')
+        
+            #f.write(nombre.text.lstrip().rstrip()+"|")
+        nombre=nombre
+        nombre=nombre.text.lstrip().rstrip()
+        nombre=nombre.replace(",","")
+        nombre=nombre.replace("\"","")
+    except:
+        nombre="None"
 
   
-        
-    Descripcion = soup.find('div', class_='subsection-content').find_all('p')    
+    try:    
+        Descripcion = soup.find('div', class_='subsection-content').find_all('p')    
+    except:
+        Descripcion="None"
     #print(Descripcion)
     #f.write(Descripcion.text+"|")
     bandera=True
@@ -133,8 +136,11 @@ def OPERACION(soup,pagina):
             continue
 
         else: 
-            bandera=False   
-            Descripcion=str(item.text)
+            bandera=False
+            try:   
+                Descripcion=str(item.text)
+            except:
+                Descripcion="None"
             a="Este porcentaje muestra el valor de la propiedad con respecto a la tendencia de los precios de la zona."
             b="Aunque haya un precio medio en una colonia, cada vivienda cuenta con particularidades que podrían incrementar o disminuir el valor."
             c="El porcentaje se ofrece solo como una guía y podría no reflejar el valor particular de la propiedad."
@@ -182,7 +188,17 @@ def OPERACION(soup,pagina):
    
     
     status = soup.find('ul', class_='carac-large')
-    columns = status.find_all('li')
+    try:
+        columns = status.find_all('li')
+    except:
+        terreno="None"
+        construidos="None"
+        banios="None"
+        estacionamientos="None"
+        Recamaras="None"
+        Medios="None"
+        Antiguedad="None"
+        
     terreno="None"
     construidos="None"
     banios="None"
@@ -233,28 +249,33 @@ def OPERACION(soup,pagina):
     colonia="None"
     delegacion="None"
     ciudad="None"   
-        
-    location=soup.find('h1',class_='title-gallery').find_all('span')
+    try:    
+        location=soup.find('h1',class_='title-gallery').find_all('span')
+            #location=location.split(",")
+        #print(location)
+        items_data2="\""+str(calle)+"\","+"\""+str(location[0]).replace("\n","").replace("<span>","").replace("</span>","").replace(",","")+"\","+"\""+str(location[2]).replace("\n","").replace("<span>","").replace("</span>","").replace(",","").replace("\"","").replace("<span itemprop=addressLocality","").replace(">","")+"\","+"\""+str(location[5]).replace("\n","").replace("<span>","").replace("</span>","").replace(",","").replace("\"","").replace("<span itemprop=addressRegion","").replace(">","")+"\","
+        f.write(normalize(str(items_data2)))
+    except:
+        items_data2="\""+str(calle)+"\","+"\""+str("None")+"\","+"\""+str("None")+"\","+"\""+str("None")+"\","
+        f.write(normalize(str(items_data2)))
      
     
-    #location=location.split(",")
-    #print(location)
-    items_data2="\""+str(calle)+"\","+"\""+str(location[0]).replace("\n","").replace("<span>","").replace("</span>","").replace(",","")+"\","+"\""+str(location[2]).replace("\n","").replace("<span>","").replace("</span>","").replace(",","").replace("\"","").replace("<span itemprop=addressLocality","").replace(">","")+"\","+"\""+str(location[5]).replace("\n","").replace("<span>","").replace("</span>","").replace(",","").replace("\"","").replace("<span itemprop=addressRegion","").replace(">","")+"\","
-    f.write(normalize(str(items_data2)))
+
      
-    #f.write("\""+location+"\",")
-    publicado=soup.find('p',class_='info-update')
- 
+    try:
+        publicado=soup.find('p',class_='info-update')
     
-    if publicado!=None:
         
-        publicado=publicado.text
-    else:
-        publicado="None"
-    #print (publicado)
-    publicado=publicado.replace("Propiedad actualizada el:","").lstrip().rstrip()
-    f.write("\""+normalize(str(publicado))+"\"\n")
-    #exit()
+        if publicado!=None:
+            
+            publicado=publicado.text
+        else:
+            publicado="None"
+        #print (publicado)
+        publicado=publicado.replace("Propiedad actualizada el:","").lstrip().rstrip()
+        f.write("\""+normalize(str(publicado))+"\"\n")
+    except:
+        f.write("\""+str("None")+"\"\n")
     
 
 
@@ -264,13 +285,16 @@ def cuerpo(URL):
  
            
         soup=navega_page(URL)
-        try:    
+        print(soup)
+        try:
+            print("entra")    
             no_results=soup.find('div', class_='content-errors')
             if no_results!=None:
                  return False
             Total_pages = soup.find('div', class_='title-result')
-        
+            
             Total_pages=Total_pages.find('span').text.replace(",","")
+            print("entra2") 
             print(str(Total_pages)+" resultados")
             Total_pages=int(Total_pages)/42
             #print(Total_pages)
@@ -280,6 +304,7 @@ def cuerpo(URL):
             print(str(Total_pages) + " paginas" )
             
         except:
+             print("error")    
              return False
         
         
