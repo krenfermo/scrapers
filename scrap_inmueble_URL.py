@@ -389,9 +389,9 @@ def cuerpo(URL):
     print(str(Total_pages)+" Paginas")
 
 
-
+    list_url=list()
     for pages in range(1,Total_pages+1) :
-        list_url=list()
+        
         
         URL2=URL
         URL2=URL2.replace(".html","-pagina-"+str(pages)+".html")
