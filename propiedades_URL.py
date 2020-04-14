@@ -7,7 +7,7 @@ import os
 
 from datetime import datetime
 from pathlib import Path
-
+import cloudscraper
 
 
 
@@ -21,8 +21,10 @@ def navega_page(pagina_numero):
     headers = {'User-Agent': 'Mozilla/5.0'}
 
 # Returns a requests.models.Response object
-
-    page = requests.get(URL, headers=headers)
+    scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
+    # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
+    page =  scraper.get(URL, headers=headers)
+    #page = requests.get(URL, headers=headers)
     soup = BeautifulSoup(page.content, 'html.parser')
     results = soup.find('div', class_='content-result cont-search-list')
     #elements = results.select('div[class*="posting-card"]')
@@ -36,7 +38,10 @@ def navega_cada_pagina(pagina):
     URL = pagina
     print(URL)
     headers = {'User-Agent': 'Mozilla/5.0'}
-    page = requests.get(URL, headers=headers)
+    scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
+    # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
+    page =  scraper.get(URL, headers=headers)
+    #page = requests.get(URL, headers=headers)
     soup = BeautifulSoup(page.content, 'html.parser')
     OPERACION(soup,pagina)
      
@@ -206,43 +211,46 @@ def OPERACION(soup,pagina):
     Recamaras="None"
     Medios="None"
     Antiguedad="None"
-    
-    for column in columns:
-        #column=str(column).replace('<br>','')
-        #print("XXX"+str(column.text.strip()))
-        dato=column.find_all('span')
-        
-        
-        #f.write(str(dato)+"|")
-        
-        if "terreno" in str(dato[0]):
-            terreno= dato[1].text
+    try:
+        for column in columns:
+            #column=str(column).replace('<br>','')
+            #print("XXX"+str(column.text.strip()))
+            dato=column.find_all('span')
             
-        if "construcción" in str(dato[0]):         
-            construidos= dato[1].text
+            
+            #f.write(str(dato)+"|")
+            
+            if "terreno" in str(dato[0]):
+                terreno= dato[1].text
+                
+            if "construcción" in str(dato[0]):         
+                construidos= dato[1].text
 
-        
-        if "Baño" in str(dato[0]):      
-            banios=dato[1].text
-            banios=banios.rstrip().lstrip()
+            
+            if "Baño" in str(dato[0]):      
+                banios=dato[1].text
+                banios=banios.rstrip().lstrip()
+                
+            
+            
+            if "Estacionamiento" in str(dato[0]):
+                estacionamientos=dato[1].text
+            
+            
+            if "Recámara" in str(dato[0]):
+                Recamaras=dato[1].text
             
         
+            if "Edad" in str(dato[0]):
+                Antiguedad=dato[1].text
+                Antiguedad=Antiguedad.rstrip().lstrip()
+        items_data="\""+str(terreno)+"\","+"\""+str(construidos)+"\","+"\""+str(banios)+"\","+"\""+str(estacionamientos)+"\","+"\""+str(Recamaras)+"\","+"\""+str(Medios)+"\","+"\""+str(Antiguedad)+"\","
         
-        if "Estacionamiento" in str(dato[0]):
-            estacionamientos=dato[1].text
+    except:
+               
+        items_data="\""+str(terreno)+"\","+"\""+str(construidos)+"\","+"\""+str(banios)+"\","+"\""+str(estacionamientos)+"\","+"\""+str(Recamaras)+"\","+"\""+str(Medios)+"\","+"\""+str(Antiguedad)+"\","
         
-        
-        if "Recámara" in str(dato[0]):
-            Recamaras=dato[1].text
-        
-       
-        if "Edad" in str(dato[0]):
-            Antiguedad=dato[1].text
-            Antiguedad=Antiguedad.rstrip().lstrip()
-        
- 
     #print("\""+str(terreno)+"\","+"\""+str(construidos)+"\","+"\""+str(banios)+"\","+"\""+str(estacionamientos)+"\","+"\""+str(Recamaras)+"\","+"\""+str(Medios)+"\","+"\""+str(Antiguedad)+"\",")    
-    items_data="\""+str(terreno)+"\","+"\""+str(construidos)+"\","+"\""+str(banios)+"\","+"\""+str(estacionamientos)+"\","+"\""+str(Recamaras)+"\","+"\""+str(Medios)+"\","+"\""+str(Antiguedad)+"\","
     f.write(normalize(str(items_data)))
  
     calle="None"
@@ -285,7 +293,7 @@ def cuerpo(URL):
  
            
         soup=navega_page(URL)
-        print(soup)
+        #print(soup)
         try:
             print("entra")    
             no_results=soup.find('div', class_='content-errors')
@@ -343,7 +351,7 @@ def cuerpo(URL):
                  
          
             for item in list_url:
-               
+                #scraper = cloudscraper.create_scraper() 
                 navega_cada_pagina(item)
 
 #python3 scrap_uno.py "comprar" "departamento" "narvarte"
