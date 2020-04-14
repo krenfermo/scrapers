@@ -234,61 +234,64 @@ def cuerpo(URL):
     
     
     for pages in range(1,Total_pages+1) :
-        list_url=list() 
-        print("PAGINA"+ str(pages))
+        try:
+            list_url=list() 
+            print("PAGINA"+ str(pages))
 
-        #f.write(URL+"|")
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        if pages==1:
-            URL3=str(URL2[0])+"/_Desde_"+str(pages)
-            
-            print(URL3)
-            page = requests.get(URL3, headers=headers)
-            
-        else:
-            pagina=pages-1
-            pagina=(int(pagina)*47)+2
-            URL4=str(URL2[0])+"/_Desde_"+str(pagina)
-            
-            print(URL4)
-            page = requests.get(URL4, headers=headers)
-        soup = BeautifulSoup(page.content, 'html.parser')
-        #time.sleep(5)
-
-        
-        results = soup.find('div', class_='inner-main')
-        
-        elements = results.find('ol', id='searchResults')
-        
-        elements=elements.find_all('div', class_='images-viewer')
-        #for item in elements:
-            #print(item['item-url'])
-        #print(elements)
-        
-        #print(elements)
-        for job_elem in elements:
-            title_elem = job_elem.find('img')['alt']
-            #print(title_elem)
-        
-            a_href = job_elem['item-url']
-            #print(a_href)
-            
-            
-            if None in (title_elem, a_href):
-                print("continua")
-                continue
-            if "articulo.mercadolibre" in a_href:
-                pass
+            #f.write(URL+"|")
+            headers = {'User-Agent': 'Mozilla/5.0'}
+            if pages==1:
+                URL3=str(URL2[0])+"/_Desde_"+str(pages)
+                
+                print(URL3)
+                page = requests.get(URL3, headers=headers)
+                
             else:
-                list_url.append(a_href)
-
-
+                pagina=pages-1
+                pagina=(int(pagina)*47)+2
+                URL4=str(URL2[0])+"/_Desde_"+str(pagina)
+                
+                print(URL4)
+                page = requests.get(URL4, headers=headers)
+            soup = BeautifulSoup(page.content, 'html.parser')
+            #time.sleep(5)
 
             
-        for item in list_url:        
-            #f.write("\""+item.lstrip().rstrip()+"\",")
-            navega_cada_pagina(item)
+            results = soup.find('div', class_='inner-main')
+            
+            elements = results.find('ol', id='searchResults')
+            
+            elements=elements.find_all('div', class_='images-viewer')
+            #for item in elements:
+                #print(item['item-url'])
+            #print(elements)
+            
+            #print(elements)
+            for job_elem in elements:
+                title_elem = job_elem.find('img')['alt']
+                #print(title_elem)
+            
+                a_href = job_elem['item-url']
+                #print(a_href)
+                
+                
+                if None in (title_elem, a_href):
+                    print("continua")
+                    continue
+                if "articulo.mercadolibre" in a_href:
+                    pass
+                else:
+                    list_url.append(a_href)
 
+
+
+                
+            for item in list_url:        
+                #f.write("\""+item.lstrip().rstrip()+"\",")
+                navega_cada_pagina(item)
+        except:
+            continue
+        
  
  
 URL=sys.argv[1]
