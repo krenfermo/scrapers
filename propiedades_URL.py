@@ -18,7 +18,16 @@ def my_round(i):
 def navega_page(pagina_numero):
      
     print(URL)
-    headers = {'User-Agent': 'Mozilla/5.0'}
+    #headers = {'User-Agent': 'Mozilla/5.0'}
+    headers = {
+"Upgrade-Insecure-Requests":"1",
+"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+
+
+"Sec-Fetch-Dest":"document",
+ 
+"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36",
+}
 
 # Returns a requests.models.Response object
     scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
@@ -37,7 +46,17 @@ def navega_page(pagina_numero):
 def navega_cada_pagina(pagina):
     URL = pagina
     print(URL)
-    headers = {'User-Agent': 'Mozilla/5.0'}
+    #headers = {'User-Agent': 'Mozilla/5.0'}
+    
+    headers = {
+"Upgrade-Insecure-Requests":"1",
+"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+
+
+"Sec-Fetch-Dest":"document",
+ 
+"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36",
+}
     scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
     # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
     page =  scraper.get(URL, headers=headers)
