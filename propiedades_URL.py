@@ -43,7 +43,7 @@ def navega_page(pagina_numero):
  
 
 
-def navega_cada_pagina(pagina):
+def navega_cada_pagina(pagina,scraper):
     URL = pagina
     print(URL)
     #headers = {'User-Agent': 'Mozilla/5.0'}
@@ -57,7 +57,7 @@ def navega_cada_pagina(pagina):
  
 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36",
 }
-    scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
+    #scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
     # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
     page =  scraper.get(URL, headers=headers)
     #page = requests.get(URL, headers=headers)
@@ -370,8 +370,8 @@ def cuerpo(URL):
                  
          
             for item in list_url:
-                #scraper = cloudscraper.create_scraper() 
-                navega_cada_pagina(item)
+                scraper = cloudscraper.create_scraper() 
+                navega_cada_pagina(item,scraper)
 
 #python3 scrap_uno.py "comprar" "departamento" "narvarte"
 
