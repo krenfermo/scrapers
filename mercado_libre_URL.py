@@ -15,6 +15,8 @@ def my_round(i):
 
 def navega_page(URL):
     
+   
+    URL=URL.replace("//","/")
     print(URL)
     headers = {'User-Agent': 'Mozilla/5.0'}
 
@@ -29,6 +31,7 @@ def navega_page(URL):
 
 def navega_cada_pagina(pagina,colonia):
     URL = pagina
+    URL=URL.replace("//","/")
     print(URL)
     headers = {'User-Agent': 'Mozilla/5.0'}
     page = requests.get(URL, headers=headers)
@@ -215,7 +218,8 @@ def cuerpo(URL,colonia):
     #exit()
     
     
-     
+    URL=URL.replace("_Desde_","/_Desde_")
+    URL=URL.replace("//","/") 
     elements,soup=navega_page(URL)
 
 
@@ -382,8 +386,13 @@ f= open(path+"\\"+"URL_"+hoy+".csv","w+")
         								                                                                                                                                			
 f.write("\"URL\","+"\"PRECIO\","+"\"TIPO\","+"\"CATEGORIA\","+"\"NOMBRE\","+"\"DESCRIPCION\","+"\"TERRENO\","+"\"CONSTRUIDOS\","+"\"BAÑOS\","+"\"ESTACIONAMIENTO\","+"\"RECAMARAS\","+"\"MEDIOS BAÑOS\","+"\"ANTIGÜEDAD\","+"\"CALLE\","+"\"COLONIA\","+"\"DELEGACION\","+"\"CIUDAD\","+"\"PUBLICADO\"\n")
 
-for col in COLONIAS:        
-    cuerpo(URL,col)
+for col in COLONIAS:  
+    try:      
+        cuerpo(URL,col)
+    except:
+        URL=URL.replace("_Desde_","/_Desde_")
+        URL=URL.replace("//","/")
+        cuerpo(URL,col)
   
 f.close() 
 
