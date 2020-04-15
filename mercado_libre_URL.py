@@ -16,7 +16,7 @@ def my_round(i):
 def navega_page(URL):
     
    
-    URL=URL.replace("//","/")
+    #URL=URL.replace("//_","/_")
     print(URL)
     headers = {'User-Agent': 'Mozilla/5.0'}
 
@@ -31,7 +31,7 @@ def navega_page(URL):
 
 def navega_cada_pagina(pagina,colonia):
     URL = pagina
-    URL=URL.replace("//","/")
+    #URL=URL.replace("//_","/_")
     print(URL)
     headers = {'User-Agent': 'Mozilla/5.0'}
     page = requests.get(URL, headers=headers)
@@ -214,14 +214,14 @@ def cuerpo(URL,colonia):
     
     URL_modificada= URL.split("_Desde_") 
     URL=str(URL_modificada[0])+str(colonia)+"_Desde_1"
-    print(URL)
+    
     #exit()
     
     
-    URL=URL.replace("_Desde_","/_Desde_")
-    URL=URL.replace("//","/") 
-    elements,soup=navega_page(URL)
-
+    try: 
+        elements,soup=navega_page(URL)
+    except:
+        return False
 
         
     Total_pages = soup.find('div', class_='quantity-results')
@@ -358,6 +358,33 @@ if URL=="https://inmuebles.mercadolibre.com.mx/venta/distrito-federal/coyoacan/_
 if URL=="https://inmuebles.mercadolibre.com.mx/renta/distrito-federal/coyoacan/_Desde_49":
     COLONIAS=['20-de-agosto','acasulco','adolfo-ruiz-cortines','ajusco','alianza-popular-revolucionaria','alianza-popular-revolucionaria-fovissste','altillo-universidad','atlantida','avante','barrio-del-nino-jesus','barrio-la-candelaria','barrio-la-concepcion','barrio-oxtopulco-universidad','barrio-san-francisco-culhuacan-barrio-de-la-magdalena','barrio-san-francisco-culhuacan-barrio-de-san-francisco','barrio-san-francisco-culhuacan-barrio-de-santa-ana','barrio-san-lucas','barrio-santa-catarina','bosques-de-tetlameya','cafetales','campestre-churubusco','campestre-coyoacan','cantil-del-pedregal','carmen-serdan','churubusco','churubusco-country-club','ciudad-jardin','colonia-culhuacan-ctm-seccion-x','colonia-ex-ejido-de-san-pablo-tepetlapa','colonia-ex-ejido-de-santa-ursula-coapa','colonia-ex-hacienda-coapa','colonia-presidentes-ejidales-1a-seccion','colonia-viejo-ejido-de-santa-ursula-coapa','concepcion','copilco','copilco-el-alto','copilco-el-bajo','copilco-universidad','country-club','coyoacan-centro','cuadrante-de-san-francisco','culhuacan-ctm-canal-nacional','culhuacan-ctm-croc','culhuacan-ctm-obrero-secc-10','culhuacan-ctm-obrero-secc-5','culhuacan-ctm-obrero-secc-6','culhuacan-ctm-obrero-secc-7','culhuacan-ctm-obrero-secc-8','culhuacan-ctm-obrero-secc-9','culhuacan-ctm-secc-iii','culhuacan-ctm-seccion-i','culhuacan-ctm-seccion-ii','culhuacan-ctm-seccion-iii','culhuacan-ctm-seccion-ix-a','culhuacan-ctm-seccion-ix-b','culhuacan-ctm-seccion-v','culhuacan-ctm-seccion-vi','culhuacan-ctm-seccion-vii','culhuacan-ctm-seccion-viii','culhuacan-ctm-seccion-x-a','culhuacan-piloto-5','del-carmen','delegacion-politica-coyoacan','educacion','el-caracol','el-centinela','el-hueso-infonavit','el-mirador','el-parque','el-parque-de-coyoacan','el-reloj','el-rosario','el-rosedal','emiliano-zapata','emiliano-zapata-fraccionamiento-popular','ermita-churubusco','espartaco','ex-ejido-san-pablo-tepetlapa','ex-ejido-santa-ursula-coapa','ex-ejido-de-san-francisco-culhuacan','ex-ejido-de-san-pablo-tepetlapa','ex-ejido-de-santa-ursula-coapa','ex-hacienda-coapa','fortin-de-chimalistac','fuentes-de-coyoacan','haciendas-de-coyoacan','hermosillo','insurgentes-cuicuilco','insurgentes-san-angel','integracion-latinoamericana','jardines-de-coyoacan','jardines-del-pedregal-de-san-angel','joyas-del-pedregal','la-candelaria-amp','la-concepcion','la-otra-banda','las-campanas','los-cedros','los-cipreses','los-girasoles','los-girasoles-2','los-girasoles-3','los-olivos','los-reyes','los-robles','los-sauces','nueva-diaz-ordaz','olimpica','otros','oxtopulco-universidad','parque-san-andres','paseos-de-taxquena','pedregal-de-carrasco','pedregal-de-coyoacan','pedregal-de-san-angel','pedregal-de-san-francisco','pedregal-de-santa-ursula','pedregal-de-santo-domingo','pedregal-del-maurel','pedregal-del-sur','petrolera-taxquena','prado-churubusco','prados-de-coyoacan','presidentes-ejidales','presidentes-ejidales-1a-seccion','presidentes-ejidales-2a-seccion','pueblo-de-los-reyes','pueblo-de-san-pablo-tepetlapa','pueblo-de-santa-ursula-coapa','pueblo-la-candelaria','residencial-cafetales','residencial-copilco','rinconada-de-los-reyes','romero-de-terreros','rosedal','san-diego-churubusco','san-francisco-culhuacan-barrio-de-san-francisco','san-mateo','san-pablo-tepetlapa','santa-cecilia','santa-ursula-coapa','stunam','taxquena','tetlameya','tlalpan','torres-de-chimalistac','torres-de-coyoacan','universidad-nacional-autonoma-de-mexico','viejo-ejido-de-santa-ursula-coapa','villa-coyoacan','villa-panamericana','villa-quietud','vistas-del-maurel','viveros-de-coyoacan','xotepingo','xotepingo-101']
 
+
+
+ 
+if URL=="https://inmuebles.mercadolibre.com.mx/venta/distrito-federal/cuajimalpa-de-morelos/_Desde_49":
+    COLONIAS=['1-de-mayo','abdias-garcia-soto','adolfo-lopez-mateos','ahuatenco','amado-nervo','ampliacion-el-yaqui','ampliacion-memetla','bosque-de-la-reforma-prolongacion','bosques-de-las-lomas','bosques-de-santa-fe','campestre-palo-alto','chamizal','club-de-golf-bosques','colonia-contadero','colonia-santa-fe-cuajimalpa','contadero','cooperativa-palo-alto','cruz-blanca','cruz-manca','cuajimalpa','cumbres-de-sta-fe','cumbres-reforma','delegacion-politica-cuajimalpa-de-morelos','desarrollo-santa-fe','el-contadero','el-ebano','el-molinito','el-molino','el-tianguillo','el-yaqui','granjas-navidad','granjas-palo-alto','jesus-del-monte','jose-maria-castorena','la-manzanita','la-navidad','la-pila','la-rosita','las-maromas','las-tinajas','locaxco','loma-del-padre','lomas-de-memetla','lomas-de-san-pedro','lomas-de-sta-fe','lomas-de-vista-hermosa','lomas-del-chamizal','lomas-del-chamizal-1a-secc','lomas-del-chamizal-3a-secc','manzanastitla','memetla','nueva-rosita','otros','prados-de-la-montana','puente-grande','rincon-de-las-lomas','san-jose-de-los-cedros','san-jose-de-los-cedros-2a-secc-granja','san-lorenzo-acopilco','san-mateo-tlaltenango','san-pedro','santa-fe-cuajimalpa','santa-rosa-xochiac','tepetongo','villas-de-cuajimalpa','vista-hermosa']
+if URL=="https://inmuebles.mercadolibre.com.mx/renta/distrito-federal/cuajimalpa-de-morelos/_Desde_49":
+    COLONIAS=['1-de-mayo','abdias-garcia-soto','adolfo-lopez-mateos','ahuatenco','amado-nervo','ampliacion-el-yaqui','ampliacion-memetla','bosque-de-la-reforma-prolongacion','bosques-de-las-lomas','bosques-de-santa-fe','campestre-palo-alto','chamizal','club-de-golf-bosques','colonia-contadero','colonia-santa-fe-cuajimalpa','contadero','cooperativa-palo-alto','cruz-blanca','cruz-manca','cuajimalpa','cumbres-de-sta-fe','cumbres-reforma','delegacion-politica-cuajimalpa-de-morelos','desarrollo-santa-fe','el-contadero','el-ebano','el-molinito','el-molino','el-tianguillo','el-yaqui','granjas-navidad','granjas-palo-alto','jesus-del-monte','jose-maria-castorena','la-manzanita','la-navidad','la-pila','la-rosita','las-maromas','las-tinajas','locaxco','loma-del-padre','lomas-de-memetla','lomas-de-san-pedro','lomas-de-sta-fe','lomas-de-vista-hermosa','lomas-del-chamizal','lomas-del-chamizal-1a-secc','lomas-del-chamizal-3a-secc','manzanastitla','memetla','nueva-rosita','otros','prados-de-la-montana','puente-grande','rincon-de-las-lomas','san-jose-de-los-cedros','san-jose-de-los-cedros-2a-secc-granja','san-lorenzo-acopilco','san-mateo-tlaltenango','san-pedro','santa-fe-cuajimalpa','santa-rosa-xochiac','tepetongo','villas-de-cuajimalpa','vista-hermosa']
+
+
+
+ 
+if URL=="https://inmuebles.mercadolibre.com.mx/venta/distrito-federal/tlalpan/_Desde_49":
+    COLONIAS=['2-de-octubre','agricola-coapa','ampliacion-fuentes-del-pedregal','ampliacion-isidro-fabela','ampliacion-miguel-hidalgo','ampliacion-oriente','arboledas-del-sur','arenal-de-guadalupe','arenal-tepepan','barrio-del-nino-jesus','barrio-el-capulin','barrio-el-truenito','barrio-la-fama','barrio-la-lonja','barrio-san-fernando','belisario-dominguez','belisario-dominguez-seccion-xvi','belvedere-ajusco','bosques-del-pedregal','cantera','cantera-puente-de-piedra','chimalcoyoc','chimali-residencial','chimilli','club-de-golf-mexico','coapa','colinas-del-bosque','colonia-ejidos-de-san-pedro-martir','colonia-fuentes-brotantes','colonia-lomas-del-pedregal-framboyanes','colonia-parque-del-pedregal','colonia-pedregal-de-santa-ursula-xitla','colonia-zacayucan-pena-pobre','cruz-del-farol','cuchilla-de-padierna','cuitlahuac','delegacion-politica-tlalpan','divisadero','dolores-tlali','dr-ignacio-chavez-infonavit','ejidos-de-huipulco','ejidos-de-san-pedro-martir','el-bosque','el-cantil','el-mirador','el-mirador-3a-seccion','el-pedregal','ex-ejido-de-huipulco','exhacienda-coapa','exhacienda-san-juan-de-dios','faroles-del-pedregal','floresta-coyoacan','fuentes-brotantes','fuentes-de-tepepan','fuentes-del-pedregal','gabriel-ramos-millan','granjas-coapa','guadalupe','guadalupe-tlalpan','guadalupita','hacienda-de-san-juan','hacienda-de-san-juan-de-tlalpan-2a-seccion','hacienda-san-juan','hueso-periferico','heroes-de-1910','heroes-de-padierna','insurgentes-cuicuilco','isidro-fabela','issfam','jardines-de-xitle','jardines-del-ajusco','jardines-en-la-montana','jardines-villa-coapa','juventud-unida','la-joya','la-magdalena-petlacalco','la-palma','las-hadas','las-tortolas','lic-emilio-portes-gil-pemex','lomas-altas-de-padierna-sur','lomas-de-cuilotepec','lomas-de-padierna','lomas-de-padierna-sur','lomas-de-tepemecatl','lomas-del-pedregal','lomas-del-pedregal-framboyanes','lomas-hidalgo','los-framboyanes','los-volcanes','magisterial','magisterial-coapa','maria-esther-zuno-de-echeverria','miguel-hidalgo','miguel-hidalgo-1a-seccion','miguel-hidalgo-2a-secc-amp','miguel-hidalgo-2a-seccion','miguel-hidalgo-3a-secc-amp','miguel-hidalgo-3a-seccion','miguel-hidalgo-4a-secc-amp','miguel-hidalgo-4a-seccion','miguel-hidalgo-amp','mirador-del-valle','mirador-i','mirador-ii','narciso-mendoza','narciso-mendoza-villa-coapa','nino-jesus','nueva-oriental-coapa','nueva-rio-blanco','oriental-coapa','otros','paraje-38','paraje-tetenco','parque-del-pedregal','parque-nacional-bosque-del-pedregal','parres-el-guarda','pedregal-de-las-aguilas','pedregal-de-san-nicolas','pedregal-de-san-nicolas-1a-seccion','pedregal-de-san-nicolas-2a-secc','pedregal-de-san-nicolas-3a-secc','pedregal-de-san-nicolas-4a-secc','pedregal-de-san-nicolas-4a-seccion','pedregal-de-santa-ursula-xitla','pedregal-de-topilejo','pedregal-del-lago','pena-pobre','plan-de-ayala','popular-santa-teresa','potrero-acoxpa','prado-coapa','prado-coapa-1a-seccion','prado-coapa-2a-seccion','prado-coapa-3a-secc','prado-coapa-3a-seccion','primavera','pueblo-la-magdalena-petlacalco','rancho-los-colorines','residencial-acoxpa','residencial-hacienda-coapa','residencial-insurgentes','residencial-miramontes','residencial-villa-coapa','retornos-del-pedregal','rinconada-coapa','rinconada-coapa-1a-seccion','rinconada-coapa-2a-secc','rinconada-coapa-2a-seccion','rinconada-las-hadas','rincon-de-san-juan','rincon-del-pedregal','romulo-sanchez-mireles','san-andres-totoltepec','san-bartolo-el-chico','san-buenaventura','san-juan-tepeximilpa','san-lorenzo-huipulco','san-miguel-ajusco','san-miguel-topilejo','san-miguel-xicalco','san-nicolas-2','san-nicolas-totolapan','san-pedro-apostol','san-pedro-martir','santa-ursula-xitla','santo-tomas-ajusco','santisima-trinidad','sauzales-cebadales','tenorios','tepepan','tepetongo','tepeximilpa-amp','tlalcoligia','tlalmille','tlalpan','tlalpan-centro','tlalpuente','toriello-guerra','torres-de-padierna','unidad-habitacional-pemex','valle-de-tepepan','valle-escondido','vergel-coapa','vergel-de-coyoacan','vergel-del-sur','vergel-tlalpan','villa-charra-del-pedregal','villa-coapa','villa-del-puente','villa-del-sur','villa-lazaro-cardenas','villa-olimpica','villa-olimpica-miguel-hidalgo','vistas-del-pedregal','viveros-coatectlan','zacayucan-pena-pobre']
+if URL=="https://inmuebles.mercadolibre.com.mx/renta/distrito-federal/tlalpan/_Desde_49":
+    COLONIAS=['2-de-octubre','agricola-coapa','ampliacion-fuentes-del-pedregal','ampliacion-isidro-fabela','ampliacion-miguel-hidalgo','ampliacion-oriente','arboledas-del-sur','arenal-de-guadalupe','arenal-tepepan','barrio-del-nino-jesus','barrio-el-capulin','barrio-el-truenito','barrio-la-fama','barrio-la-lonja','barrio-san-fernando','belisario-dominguez','belisario-dominguez-seccion-xvi','belvedere-ajusco','bosques-del-pedregal','cantera','cantera-puente-de-piedra','chimalcoyoc','chimali-residencial','chimilli','club-de-golf-mexico','coapa','colinas-del-bosque','colonia-ejidos-de-san-pedro-martir','colonia-fuentes-brotantes','colonia-lomas-del-pedregal-framboyanes','colonia-parque-del-pedregal','colonia-pedregal-de-santa-ursula-xitla','colonia-zacayucan-pena-pobre','cruz-del-farol','cuchilla-de-padierna','cuitlahuac','delegacion-politica-tlalpan','divisadero','dolores-tlali','dr-ignacio-chavez-infonavit','ejidos-de-huipulco','ejidos-de-san-pedro-martir','el-bosque','el-cantil','el-mirador','el-mirador-3a-seccion','el-pedregal','ex-ejido-de-huipulco','exhacienda-coapa','exhacienda-san-juan-de-dios','faroles-del-pedregal','floresta-coyoacan','fuentes-brotantes','fuentes-de-tepepan','fuentes-del-pedregal','gabriel-ramos-millan','granjas-coapa','guadalupe','guadalupe-tlalpan','guadalupita','hacienda-de-san-juan','hacienda-de-san-juan-de-tlalpan-2a-seccion','hacienda-san-juan','hueso-periferico','heroes-de-1910','heroes-de-padierna','insurgentes-cuicuilco','isidro-fabela','issfam','jardines-de-xitle','jardines-del-ajusco','jardines-en-la-montana','jardines-villa-coapa','juventud-unida','la-joya','la-magdalena-petlacalco','la-palma','las-hadas','las-tortolas','lic-emilio-portes-gil-pemex','lomas-altas-de-padierna-sur','lomas-de-cuilotepec','lomas-de-padierna','lomas-de-padierna-sur','lomas-de-tepemecatl','lomas-del-pedregal','lomas-del-pedregal-framboyanes','lomas-hidalgo','los-framboyanes','los-volcanes','magisterial','magisterial-coapa','maria-esther-zuno-de-echeverria','miguel-hidalgo','miguel-hidalgo-1a-seccion','miguel-hidalgo-2a-secc-amp','miguel-hidalgo-2a-seccion','miguel-hidalgo-3a-secc-amp','miguel-hidalgo-3a-seccion','miguel-hidalgo-4a-secc-amp','miguel-hidalgo-4a-seccion','miguel-hidalgo-amp','mirador-del-valle','mirador-i','mirador-ii','narciso-mendoza','narciso-mendoza-villa-coapa','nino-jesus','nueva-oriental-coapa','nueva-rio-blanco','oriental-coapa','otros','paraje-38','paraje-tetenco','parque-del-pedregal','parque-nacional-bosque-del-pedregal','parres-el-guarda','pedregal-de-las-aguilas','pedregal-de-san-nicolas','pedregal-de-san-nicolas-1a-seccion','pedregal-de-san-nicolas-2a-secc','pedregal-de-san-nicolas-3a-secc','pedregal-de-san-nicolas-4a-secc','pedregal-de-san-nicolas-4a-seccion','pedregal-de-santa-ursula-xitla','pedregal-de-topilejo','pedregal-del-lago','pena-pobre','plan-de-ayala','popular-santa-teresa','potrero-acoxpa','prado-coapa','prado-coapa-1a-seccion','prado-coapa-2a-seccion','prado-coapa-3a-secc','prado-coapa-3a-seccion','primavera','pueblo-la-magdalena-petlacalco','rancho-los-colorines','residencial-acoxpa','residencial-hacienda-coapa','residencial-insurgentes','residencial-miramontes','residencial-villa-coapa','retornos-del-pedregal','rinconada-coapa','rinconada-coapa-1a-seccion','rinconada-coapa-2a-secc','rinconada-coapa-2a-seccion','rinconada-las-hadas','rincon-de-san-juan','rincon-del-pedregal','romulo-sanchez-mireles','san-andres-totoltepec','san-bartolo-el-chico','san-buenaventura','san-juan-tepeximilpa','san-lorenzo-huipulco','san-miguel-ajusco','san-miguel-topilejo','san-miguel-xicalco','san-nicolas-2','san-nicolas-totolapan','san-pedro-apostol','san-pedro-martir','santa-ursula-xitla','santo-tomas-ajusco','santisima-trinidad','sauzales-cebadales','tenorios','tepepan','tepetongo','tepeximilpa-amp','tlalcoligia','tlalmille','tlalpan','tlalpan-centro','tlalpuente','toriello-guerra','torres-de-padierna','unidad-habitacional-pemex','valle-de-tepepan','valle-escondido','vergel-coapa','vergel-de-coyoacan','vergel-del-sur','vergel-tlalpan','villa-charra-del-pedregal','villa-coapa','villa-del-puente','villa-del-sur','villa-lazaro-cardenas','villa-olimpica','villa-olimpica-miguel-hidalgo','vistas-del-pedregal','viveros-coatectlan','zacayucan-pena-pobre']
+
+
+
+
+
+
+
+
+#
+#
+#
+
 # Asigna formato de ejemplo1
 formato1 = "%Y-%m-%d %H_%M_%S"
 hoy = datetime.today()  # Asigna fecha-hora
@@ -385,13 +412,17 @@ else:
 f= open(path+"\\"+"URL_"+hoy+".csv","w+")
         								                                                                                                                                			
 f.write("\"URL\","+"\"PRECIO\","+"\"TIPO\","+"\"CATEGORIA\","+"\"NOMBRE\","+"\"DESCRIPCION\","+"\"TERRENO\","+"\"CONSTRUIDOS\","+"\"BAÑOS\","+"\"ESTACIONAMIENTO\","+"\"RECAMARAS\","+"\"MEDIOS BAÑOS\","+"\"ANTIGÜEDAD\","+"\"CALLE\","+"\"COLONIA\","+"\"DELEGACION\","+"\"CIUDAD\","+"\"PUBLICADO\"\n")
-
-for col in COLONIAS:  
+contador=1
+for col in COLONIAS: 
+    print(contador) 
+    contador+=1
     try:      
         cuerpo(URL,col)
     except:
+         
         URL=URL.replace("_Desde_","/_Desde_")
-        URL=URL.replace("//","/")
+        URL=URL.replace("//_","/_")
+        
         cuerpo(URL,col)
   
 f.close() 
