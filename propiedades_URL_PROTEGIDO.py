@@ -7,7 +7,7 @@ import os
 
 from datetime import datetime
 from pathlib import Path
-#import cloudscraper
+import cloudscraper
 
 
 
@@ -17,7 +17,6 @@ def my_round(i):
 
 def navega_page(pagina):
      
-    
     print(pagina)
     #headers = {'User-Agent': 'Mozilla/5.0'}
     headers = {
@@ -31,10 +30,10 @@ def navega_page(pagina):
 }
 
 # Returns a requests.models.Response object
-    #scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
+    scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
     # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
-    #page =  scraper.get(URL, headers=headers)
-    page = requests.get(pagina, headers=headers)
+    page =  scraper.get(pagina, headers=headers)
+    #page = requests.get(URL, headers=headers)
     soup = BeautifulSoup(page.content, 'html.parser')
     results = soup.find('div', class_='content-result cont-search-list')
     #elements = results.select('div[class*="posting-card"]')
@@ -44,7 +43,7 @@ def navega_page(pagina):
  
 
 
-def navega_cada_pagina(pagina):
+def navega_cada_pagina(pagina,scraper):
      
     print(pagina)
     #headers = {'User-Agent': 'Mozilla/5.0'}
@@ -60,8 +59,8 @@ def navega_cada_pagina(pagina):
 }
     #scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
     # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
-    #page =  scraper.get(URL, headers=headers)
-    page = requests.get(pagina, headers=headers)
+    page =  scraper.get(pagina, headers=headers)
+    #page = requests.get(URL, headers=headers)
     soup = BeautifulSoup(page.content, 'html.parser')
     OPERACION(soup,pagina)
      
@@ -371,8 +370,8 @@ def cuerpo(URL):
                  
          
             for item in list_url:
-                #scraper = cloudscraper.create_scraper() 
-                navega_cada_pagina(item)
+                scraper = cloudscraper.create_scraper() 
+                navega_cada_pagina(item,scraper)
 
 #python3 scrap_uno.py "comprar" "departamento" "narvarte"
 
