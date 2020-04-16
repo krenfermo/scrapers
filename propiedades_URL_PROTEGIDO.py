@@ -93,6 +93,25 @@ def normalize(s):
 def OPERACION(soup,pagina):
     try:
         precio = soup.find('span', class_='price')
+        
+        precio=precio.text.replace("$","")
+        
+        if "MDP" in str(precio):
+            
+            precio=precio.split("MDP")
+            precio=precio[0]
+          
+            precio= float(precio)*(1000000)
+            precio="{:.0f}".format(precio)
+            
+            
+             
+        if "mil" in str(precio):
+            
+            precio=precio.split("mil MN")
+            precio=precio[0]
+            precio= float(precio)*(1000)
+            precio="{:.0f}".format(precio)
      
         
     except:
@@ -109,6 +128,12 @@ def OPERACION(soup,pagina):
         file_catego="Casa"
     elif "departamento" in pagina:
         file_catego="Departamento"
+    elif "oficina" in pagina:
+            file_catego="oficina"
+    elif "terreno" in pagina:
+        file_catego="terreno"
+    elif "bodega" in pagina:
+            file_catego="bodega"
             
 
     
@@ -174,7 +199,7 @@ def OPERACION(soup,pagina):
             try:
                     Descripcion=normalize(str(Descripcion))
                     f.write("\""+pagina.lstrip().rstrip()+"\",")
-                    f.write("\""+precio.text.lstrip().rstrip().replace("$","")+"\",")
+                    f.write("\""+str(precio)+"\",")
                     f.write("\""+operation+"\",")
                     
                     if "casa" in Descripcion or "casa" in nombre:
