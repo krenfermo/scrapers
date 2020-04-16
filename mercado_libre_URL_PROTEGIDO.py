@@ -7,7 +7,7 @@ import os
 
 from datetime import datetime
 from pathlib import Path
-
+import cloudscraper
 
 def my_round(i):
     f = math.floor(i)
@@ -18,11 +18,20 @@ def navega_page(URL):
    
     #URL=URL.replace("//_","/_")
     print(URL)
-    headers = {'User-Agent': 'Mozilla/5.0'}
+    headers = {
+"Upgrade-Insecure-Requests":"1",
+"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
 
-# Returns a requests.models.Response object
 
-    page = requests.get(URL, headers=headers)
+"Sec-Fetch-Dest":"document",
+ 
+"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36",
+}
+
+    scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
+    # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
+    page =  scraper.get(URL, headers=headers)
+    
     soup = BeautifulSoup(page.content, 'html.parser')
     results = soup.find('div', class_='inner-main')
     
@@ -30,11 +39,22 @@ def navega_page(URL):
     return elements,soup
 
 def navega_cada_pagina(pagina,colonia):
-    
+     
     #URL=URL.replace("//_","/_")
-    print(URL)
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    page = requests.get(pagina, headers=headers)
+    print(pagina)
+    headers = {
+"Upgrade-Insecure-Requests":"1",
+"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+
+
+"Sec-Fetch-Dest":"document",
+ 
+"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36",
+}
+
+    scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
+    # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
+    page =  scraper.get(pagina, headers=headers)
     soup = BeautifulSoup(page.content, 'html.parser')
     results = soup.find('h1', class_='item-title__primary')
     
@@ -261,15 +281,27 @@ def cuerpo(URL,colonia):
             print("PAGINA"+ str(pages))
 
             #f.write(URL+"|")
-            headers = {'User-Agent': 'Mozilla/5.0'}
+            headers = {
+"Upgrade-Insecure-Requests":"1",
+"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+
+
+"Sec-Fetch-Dest":"document",
+ 
+"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36",
+}
+
+
             if pages==1:
                 URL2=URL2[0].split("_Desde_")
                 print("URL2_0:"+str(URL2))
                 URL3=str(URL2[0])+"_Desde_"+str(pages)
                 
                 print(URL3)
-               
-                page = requests.get(URL3, headers=headers)
+                scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
+   
+                page =  scraper.get(URL3, headers=headers)
+                
                 
             else:
                 pagina=pages-1
@@ -277,7 +309,8 @@ def cuerpo(URL,colonia):
                 URL4=str(URL2[0])+"_Desde_"+str(pagina)
                 
                 print(URL4)
-                page = requests.get(URL4, headers=headers)
+                scraper = cloudscraper.create_scraper()  
+                page = scraper.get(URL4, headers=headers)
              
             soup = BeautifulSoup(page.content, 'html.parser')
             #time.sleep(5)

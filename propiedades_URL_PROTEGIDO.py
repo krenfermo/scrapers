@@ -126,6 +126,8 @@ def OPERACION(soup,pagina):
     file_catego="None"
     if "casa" in pagina:
         file_catego="Casa"
+    elif "edificio" in pagina:
+        file_catego="edificio"
     elif "departamento" in pagina:
         file_catego="Departamento"
     elif "oficina" in pagina:

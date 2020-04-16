@@ -82,8 +82,16 @@ def venta(soup,pagina):
     file_catego="None"
     if "casa" in pagina:
         file_catego="Casa"
+    elif "edificio" in pagina:
+        file_catego="edificio"
     elif "departamento" in pagina:
         file_catego="Departamento"
+    elif "oficina" in pagina:
+        file_catego="oficina"
+    elif "terreno" in pagina:
+        file_catego="terreno"
+    elif "bodega" in pagina:
+            file_catego="bodega"
     
 
     nombre = soup.find('li', class_='bread-item current')
@@ -117,10 +125,11 @@ def venta(soup,pagina):
     Descripcion=normalize(str(Descripcion))
     
     
-    f.write("\""+precio.text.lstrip().rstrip().replace("MN","")+"\",")
+    f.write("\""+precio.text.lstrip().rstrip().replace("MN","").replace(",","")+"\",")
     f.write("\""+operation+"\",")
     if "casa" in Descripcion or "casa" in nombre:
             file_catego="Casa"
+
     elif "departamento" in Descripcion or "departamento" in nombre:
         file_catego="Departamento"
     elif "depto" in Descripcion or "depto" in nombre:
