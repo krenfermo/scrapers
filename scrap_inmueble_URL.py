@@ -67,10 +67,11 @@ def normalize(s):
 
 
 def venta(soup,pagina):
-    
-    precio = soup.find('div', class_='price-items')
+    try:
+        precio = soup.find('div', class_='price-items')
     #print(precio.text.lstrip().rstrip())
-    
+    except:
+        precio="None"
    
     
     operation="None"
@@ -95,35 +96,38 @@ def venta(soup,pagina):
     
 
     nombre = soup.find('li', class_='bread-item current')
-    if nombre==None:
-        nombre=pagina.rsplit('/', 1)[-1]
-        nombre=nombre.split("-")
-        size=len(nombre)
-        nombre.pop()
-        name=""
-        for item in nombre:
-            name+=item.capitalize()+" " 
-        #f.write(name.lstrip().rstrip()+"|")
-        nombre=normalize(str(name.lstrip().rstrip()))
-         
-    else:
-        
-        #f.write(nombre.text.lstrip().rstrip()+"|")
-        nombre=nombre.text.lstrip().rstrip()
-        nombre=nombre.replace(",","")
-        nombre=nombre.replace("\"","")
-        nombre=normalize(str(nombre))
-        
+    try:
+        if nombre==None:
+            nombre=pagina.rsplit('/', 1)[-1]
+            nombre=nombre.split("-")
+            size=len(nombre)
+            nombre.pop()
+            name=""
+            for item in nombre:
+                name+=item.capitalize()+" " 
+            #f.write(name.lstrip().rstrip()+"|")
+            nombre=normalize(str(name.lstrip().rstrip()))
+            
+        else:
+            
+            #f.write(nombre.text.lstrip().rstrip()+"|")
+            nombre=nombre.text.lstrip().rstrip()
+            nombre=nombre.replace(",","")
+            nombre=nombre.replace("\"","")
+            nombre=normalize(str(nombre))
+    except:
+        nombre="None"        
     
-
+    try:
         
-    Descripcion = soup.find('div', id='verDatosDescripcion')    
-    #print(Descripcion.text)
-    #f.write(Descripcion.text+"|")
-    Descripcion=Descripcion.text
-    Descripcion=Descripcion.replace("\"","")
-    Descripcion=normalize(str(Descripcion))
-    
+        Descripcion = soup.find('div', id='verDatosDescripcion')    
+        #print(Descripcion.text)
+        #f.write(Descripcion.text+"|")
+        Descripcion=Descripcion.text
+        Descripcion=Descripcion.replace("\"","")
+        Descripcion=normalize(str(Descripcion))
+    except:
+        Descripcion="None"    
     
     f.write("\""+precio.text.lstrip().rstrip().replace("MN","").replace(",","")+"\",")
     f.write("\""+operation+"\",")
@@ -151,47 +155,48 @@ def venta(soup,pagina):
     Recamaras="None"
     Medios="None"
     Antiguedad="None"
-    
-    for column in columns:
-        #column=str(column).replace('<br>','')
-        #print("XXX"+str(column.text.strip()))
-        dato=column.find('b').text +" "+column.find('span').text
-        #print(dato)
-        #f.write(str(dato)+"|")
-        
-        if "Terreno" in str(dato):
-            terreno=str(dato).split("m")
-            terreno= str(terreno[0].lstrip().rstrip())
+    try:
+        for column in columns:
+            #column=str(column).replace('<br>','')
+            #print("XXX"+str(column.text.strip()))
+            dato=column.find('b').text +" "+column.find('span').text
+            #print(dato)
+            #f.write(str(dato)+"|")
             
-        if "Construidos" in str(dato):
-             
-            
-            construidos=str(dato).split("m")
-            construidos= str(construidos[0].lstrip().rstrip())
-            
+            if "Terreno" in str(dato):
+                terreno=str(dato).split("m")
+                terreno= str(terreno[0].lstrip().rstrip())
                 
-        if "Medios" in str(dato):
-            Medios=str(dato)   
-        
-        if Medios=="None" and  "Baño" in str(dato):
-         
-            banios=str(dato)
-        
-        
-        if "Estacionamiento" in str(dato):
-            estacionamientos=str(dato).replace("Estacionamientos","").replace("Estacionamiento","")
-        
-        
-        if "Recámaras" in str(dato):
-            Recamaras=str(dato) 
-        
+            if "Construidos" in str(dato):
+                
+                
+                construidos=str(dato).split("m")
+                construidos= str(construidos[0].lstrip().rstrip())
+                
+                    
+            if "Medios" in str(dato):
+                Medios=str(dato)   
+            
+            if Medios=="None" and  "Baño" in str(dato):
+            
+                banios=str(dato)
+            
+            
+            if "Estacionamiento" in str(dato):
+                estacionamientos=str(dato).replace("Estacionamientos","").replace("Estacionamiento","")
+            
+            
+            if "Recámaras" in str(dato):
+                Recamaras=str(dato) 
+            
 
-         
+            
+            
         
-       
-        if "Antigüedad" in str(dato):
-            Antiguedad=str(dato)
-        
+            if "Antigüedad" in str(dato):
+                Antiguedad=str(dato)
+    except:
+        pass        
  
     #print("\""+str(terreno)+"\","+"\""+str(construidos)+"\","+"\""+str(banios)+"\","+"\""+str(estacionamientos)+"\","+"\""+str(Recamaras)+"\","+"\""+str(Medios)+"\","+"\""+str(Antiguedad)+"\",")    
     items_data="\""+str(terreno)+"\","+"\""+str(construidos)+"\","+"\""+str(banios)+"\","+"\""+str(estacionamientos)+"\","+"\""+str(Recamaras)+"\","+"\""+str(Medios)+"\","+"\""+str(Antiguedad)+"\","
@@ -201,41 +206,49 @@ def venta(soup,pagina):
     colonia="None"
     delegacion="None"
     ciudad="None"   
+    try:    
+        location=soup.find('div',class_='section-location')
+        #print(location.text.lstrip().rstrip())   
+        #f.write(location.text.lstrip().rstrip()+"|")
+        location=location.text.lstrip().rstrip()
+        location=location.replace("\"","")
         
-    location=soup.find('div',class_='section-location')
-    #print(location.text.lstrip().rstrip())   
-    #f.write(location.text.lstrip().rstrip()+"|")
-    location=location.text.lstrip().rstrip()
-    location=location.replace("\"","")
+        location=location.split(",")
+        #print(location)
+        items_data2="\"None\",\"None\",\"None\",\"None\","
+        if (len(location)==3):
+            calle=location[0]
+            colonia=location[1]
+            delegacion=location[2]
+            items_data2="\""+str(calle)+"\","+"\""+str(colonia)+"\","+"\""+str(delegacion)+"\","+"\""+str(ciudad)+"\","
+        if (len(location)>3):
+            calle=location[0]
+            colonia=location[1]
+            delegacion=location[2]
+            ciudad=location[3]
+            items_data2="\""+str(calle)+"\","+"\""+str(colonia)+"\","+"\""+str(delegacion)+"\","+"\""+str(ciudad)+"\","
+    except:
+        items_data2="\"None\",\"None\",\"None\",\"None\","
+            
     
-    location=location.split(",")
-    #print(location)
-    items_data2="\"None\",\"None\",\"None\",\"None\","
-    if (len(location)==3):
-       calle=location[0]
-       colonia=location[1]
-       delegacion=location[2]
-       items_data2="\""+str(calle)+"\","+"\""+str(colonia)+"\","+"\""+str(delegacion)+"\","+"\""+str(ciudad)+"\","
-    if (len(location)>3):
-        calle=location[0]
-        colonia=location[1]
-        delegacion=location[2]
-        ciudad=location[3]
-        items_data2="\""+str(calle)+"\","+"\""+str(colonia)+"\","+"\""+str(delegacion)+"\","+"\""+str(ciudad)+"\","
+    
     f.write(normalize(str(items_data2)))
-    
-    #f.write("\""+location+"\",")
-    publicado=soup.find('h5',class_='section-date css-float-r')
-    #print(static_map['src'])
-    #f.write(static_map['src']+"\n")
-    
-    if publicado!=None:
+    try:
+        #f.write("\""+location+"\",")
+        publicado=soup.find('h5',class_='section-date css-float-r')
+        #print(static_map['src'])
+        #f.write(static_map['src']+"\n")
         
-        publicado=publicado.text
-    else:
+        if publicado!=None:
+            
+            publicado=publicado.text
+        else:
+            publicado="None"
+        #print (publicado)
+   
+        publicado=publicado.replace("Publicado hace","").lstrip().rstrip()
+    except:
         publicado="None"
-    #print (publicado)
-    publicado=publicado.replace("Publicado hace","").lstrip().rstrip()
     f.write("\""+normalize(str(publicado))+"\"\n")
 
 
