@@ -7,9 +7,32 @@ import os
 
 from datetime import datetime
 from pathlib import Path
+import csv
+ 
 
- 
- 
+
+
+def import_csv(csvfilename):
+    data = []
+    with open(csvfilename, "r", encoding="utf-8", errors="ignore") as scraped:
+        print(csvfilename)
+        reader = csv.reader(scraped, delimiter=',')
+        row_index=1
+        for row in reader:
+            if row:  # avoid blank lines
+                row_index += 1
+                try: 
+                    columns = [row[0]]
+                    data.append(columns)
+                except:
+                    continue
+    f = open(csvfilename, "r+")
+    lines = f.readlines()
+    lines.pop()
+    f = open(csvfilename, "w+")
+    f.writelines(lines)
+    return data
+
 def my_round(i):
     f = math.floor(i)
     return f if i - f < 0.5 else f+1
@@ -412,7 +435,7 @@ def cuerpo(URL):
 
 
     
-    for pages in range(294,Total_pages+1) :
+    for pages in range(comienzo,Total_pages+1) :
         list_url=list()
         
         URL2=URL
@@ -464,10 +487,12 @@ def cuerpo(URL):
 #python3 scrap_uno.py "comprar" "departamento" "narvarte"
  
 URL=sys.argv[1]
-    
+miarchivo=str(sys.argv[2])
+comienzo=int(sys.argv[3])
+
    
 # Asigna formato de ejemplo1
-formato1 = "%Y-%m-%d %H_%M_%S"
+formato1 = "%Y-%m-%d"
 hoy = datetime.today()  # Asigna fecha-hora
 # Aplica formato ejemplo1
 hoy = hoy.strftime(formato1)  
@@ -492,12 +517,35 @@ else:
 
 
 
-f= open(path+"\\"+"URL_"+hoy+".csv","w+")
-        								                                                                                                                                			
 
-f.write("\"URL\","+"\"PRECIO\","+"\"TIPO\","+"\"CATEGORIA\","+"\"NOMBRE\","+"\"DESCRIPCION\","+"\"TERRENO\","+"\"CONSTRUIDOS\","+"\"BAÑOS\","+"\"ESTACIONAMIENTO\","+"\"RECAMARAS\","+"\"MEDIOS BAÑOS\","+"\"ANTIGÜEDAD\","+"\"CALLE\","+"\"COLONIA\","+"\"DELEGACION\","+"\"CIUDAD\","+"\"PUBLICADO\"\n")
- 
-cuerpo(URL)
+
+
+
+
+
+if os.path.exists(path+"\\"+miarchivo+".csv"):
+            print("ya EXISTE ARCHIVO " + str(path+"\\"+miarchivo+".csv"))
+           
+            data = import_csv(path+"\\"+miarchivo+".csv")
+            #last_row = data[-1]
+            #print()
+            
+            #exit() 
+            f= open(path+"\\"+miarchivo+".csv","a+") 
+            cuerpo(URL)                                                                                                                                                                                  
+           
+            
+else:
+            last_row="null"
+            print("no existe CREA CSV " + str(path+"\\"+miarchivo+".csv"))
+            f= open(path+"\\"+miarchivo+".csv","w+")
+                                                                                                                                                                                                
+
+            f.write("\"URL\","+"\"PRECIO\","+"\"TIPO\","+"\"CATEGORIA\","+"\"NOMBRE\","+"\"DESCRIPCION\","+"\"TERRENO\","+"\"CONSTRUIDOS\","+"\"BAÑOS\","+"\"ESTACIONAMIENTO\","+"\"RECAMARAS\","+"\"MEDIOS BAÑOS\","+"\"ANTIGÜEDAD\","+"\"CALLE\","+"\"COLONIA\","+"\"DELEGACION\","+"\"CIUDAD\","+"\"PUBLICADO\"\n")
+            cuerpo(URL)
+            
+            
+            
  
 f.close() 
 
