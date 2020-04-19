@@ -68,7 +68,7 @@ def normalize(s):
 
 def venta(soup,pagina):
     try:
-        precio = soup.find('div', class_='price-items')
+        precio = soup.find('div', class_='price-items').text
     #print(precio.text.lstrip().rstrip())
     except:
         precio="None"
@@ -129,7 +129,7 @@ def venta(soup,pagina):
     except:
         Descripcion="None"    
     
-    f.write("\""+precio.text.lstrip().rstrip().replace("MN","").replace(",","")+"\",")
+    f.write("\""+precio.lstrip().rstrip().replace("MN","").replace(",","")+"\",")
     f.write("\""+operation+"\",")
     if "casa" in Descripcion or "casa" in nombre:
             file_catego="Casa"
@@ -412,7 +412,7 @@ def cuerpo(URL):
 
 
     
-    for pages in range(1,Total_pages+1) :
+    for pages in range(294,Total_pages+1) :
         list_url=list()
         
         URL2=URL
