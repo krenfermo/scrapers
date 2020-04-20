@@ -543,11 +543,7 @@ else:
  
 
 print(path)
-if os.path.exists(path):
-    print("CARPETA YA EXISTIA Y NO LA CREA")
-else:
-    print("CARPETA CREADA")
-    os.mkdir(path)
+ 
 
 
 

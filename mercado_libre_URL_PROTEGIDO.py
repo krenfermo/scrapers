@@ -8,6 +8,33 @@ import os
 from datetime import datetime
 from pathlib import Path
 import cloudscraper
+import csv
+
+
+
+
+def import_csv(csvfilename):
+    data = []
+    with open(csvfilename, "r", encoding="utf-8", errors="ignore") as scraped:
+        print(csvfilename)
+        reader = csv.reader(scraped, delimiter=',')
+        row_index=1
+        for row in reader:
+            if row:  # avoid blank lines
+                row_index += 1
+                try: 
+                    columns = [row[14]]
+                    data.append(columns)
+                except:
+                    continue
+    f = open(csvfilename, "r+")
+    lines = f.readlines()
+    lines.pop()
+    f = open(csvfilename, "w+")
+    f.writelines(lines)
+    return data
+
+
 
 def my_round(i):
     f = math.floor(i)
@@ -215,12 +242,13 @@ def venta(soup,pagina,colonia):
         
         location=location.split(",")
         #print(location)
-        items_data2="\"None\",\"None\",\"None\",\"None\","
+        items_data2="\"None\","+"\""+str(colonia)+"\","+"\"None\",\"None\","
         if (len(location)==3):
         #calle=location[0]
             #colonia=location[0]
             delegacion=location[1]
             ciudad=location[2]
+            #print(colonia)
             items_data2="\""+str(calle)+"\","+"\""+str(colonia)+"\","+"\""+str(delegacion)+"\","+"\""+str(ciudad)+"\","
             
     except:
@@ -229,8 +257,10 @@ def venta(soup,pagina,colonia):
         delegacion="None"
         ciudad="None"
         calle="None"
-        
+        #print(colonia)
         items_data2="\""+str(calle)+"\","+"\""+str(colonia)+"\","+"\""+str(delegacion)+"\","+"\""+str(ciudad)+"\","
+    #print(colonia)
+    
     
     
     f.write(normalize(str(items_data2)))
@@ -239,7 +269,7 @@ def venta(soup,pagina,colonia):
     #exit()
 
 
-def cuerpo(URL,colonia):
+def cuerpo(URL,colonia,contador):
     
     URL_modificada= URL.split("_Desde_") 
     URL=str(URL_modificada[0])+str(colonia)+"_Desde_1"
@@ -278,7 +308,7 @@ def cuerpo(URL,colonia):
     for pages in range(1,Total_pages+1) :
         try:
             list_url=list() 
-            print("PAGINA"+ str(pages))
+            print("COLONIA: "+str(contador) )
 
             #f.write(URL+"|")
             headers = {
@@ -354,6 +384,8 @@ def cuerpo(URL,colonia):
 
 
 URL=sys.argv[1]
+miarchivo=str(sys.argv[2])
+comienzo=int(sys.argv[3])
      
 #['algarin','ampliacion-asturias','asturias','asturias-amp','atlampa','buenavista','buenos-aires','centro-de-la-ciudad-de-mexico-area-1','centro-de-la-ciudad-de-mexico-area-2','centro-de-la-ciudad-de-mexico-area-3','centro-de-la-ciudad-de-mexico-area-4','centro-de-la-ciudad-de-mexico-area-5','centro-de-la-ciudad-de-mexico-area-6','centro-de-la-ciudad-de-mexico-area-7','centro-de-la-ciudad-de-mexico-area-8','centro-de-la-ciudad-de-mexico-area-9','centro-de-recepcion-de-depositos-masivos-centro','centro-urbano-benito-juarez','condesa','cuauhtemoc','doctores','esperanza','ex-hipodromo-de-peralvillo','felipe-pescador','guerrero','h-camara-de-senadores','hipodromo-condesa','hipodromo','juarez','maza','morelos','nonoalco-tlatelolco','obrera','otros','paseo-de-la-reforma','paulino-navarro','peralvillo','procuraduria-general-de-la-republica','roma-norte','roma-sur','san-rafael','san-simon-tolnahuac','santa-maria-insurgentes','santa-maria-la-ribera','tabacalera','transito','valle-gomez','vista-alegre']
 #['10-de-abril','5-de-mayo','agricultura','ahuehuetes-anahuac','ampliacion-daniel-garza','ampliacion-granada','ampliacion-torre-blanca','america','anahuac','anahuac-i-seccion','anahuac-ii-seccion','anzures','anahuac-ii-secc','argentina-antigua','argentina-poniente','bosque-de-chapultepec','bosque-de-chapultepec-i-seccion','bosque-de-chapultepec-ii-seccion','bosque-de-chapultepec-iii-seccion','bosque-de-las-lomas','chapultepec-morales','cinco-de-mayo','cuauhtemoc-pensil','daniel-garza','daniel-garza-amp','delegacion-politica-miguel-hidalgo','deportivo-pensil','dos-lagos','equipamiento-bosque-de-chapultepec-i-seccion','escandon','escandon-i-secc','escandon-i-seccion','escandon-ii-seccion','francisco-i-madero','granada','granada-amp','huichapan','irrigacion'] 
@@ -362,7 +394,7 @@ URL=sys.argv[1]
 #['8-de-agosto','acacias','actipan','alamos','albert','ampliacion-napoles','americas-unidas','atenor-salas','centro-urbano-presidente-miguel-aleman','ciudad-de-los-deportes','colonia-del-valle','colonia-narvarte-oriente','credito-constructor','del-carmen','del-lago','del-valle-centro','del-valle-norte','del-valle-sur','emperadores','ermita','extremadura-insurgentes','general-pedro-maria-anaya','gral-pedro-maria-anaya','independencia','insurgentes-mixcoac','insurgentes-san-borja','iztaccihuatl','josefa-ortiz-de-dominguez','letran-valle']
 if URL == "https://inmuebles.mercadolibre.com.mx/venta/distrito-federal/cuauhtemoc/_Desde_49":   
     #COLONIAS=['algarin','ampliacion-asturias','asturias','asturias-amp','atlampa','buenavista','buenos-aires','centro-de-la-ciudad-de-mexico-area-1','centro-de-la-ciudad-de-mexico-area-2','centro-de-la-ciudad-de-mexico-area-3','centro-de-la-ciudad-de-mexico-area-4','centro-de-la-ciudad-de-mexico-area-5','centro-de-la-ciudad-de-mexico-area-6','centro-de-la-ciudad-de-mexico-area-7','centro-de-la-ciudad-de-mexico-area-8','centro-de-la-ciudad-de-mexico-area-9','centro-de-recepcion-de-depositos-masivos-centro','centro-urbano-benito-juarez','condesa','cuauhtemoc/','doctores','esperanza','ex-hipodromo-de-peralvillo','felipe-pescador','guerrero','h-camara-de-senadores','hipodromo-condesa','hipodromo','juarez','maza','morelos','nonoalco-tlatelolco','obrera','otros','paseo-de-la-reforma','paulino-navarro','peralvillo','procuraduria-general-de-la-republica','roma-norte','roma-sur','san-rafael','san-simon-tolnahuac','santa-maria-insurgentes','santa-maria-la-ribera','tabacalera','transito','valle-gomez','vista-alegre']
-    COLONIAS=['cuauhtemoc/','doctores','esperanza','ex-hipodromo-de-peralvillo','felipe-pescador','guerrero','h-camara-de-senadores','hipodromo-condesa','hipodromo','juarez','maza','morelos','nonoalco-tlatelolco','obrera','otros','paseo-de-la-reforma','paulino-navarro','peralvillo','procuraduria-general-de-la-republica','roma-norte','roma-sur','san-rafael','san-simon-tolnahuac','santa-maria-insurgentes','santa-maria-la-ribera','tabacalera','transito','valle-gomez','vista-alegre']
+    COLONIAS=['cuauhtemoc','doctores','esperanza','ex-hipodromo-de-peralvillo','felipe-pescador','guerrero','h-camara-de-senadores','hipodromo-condesa','hipodromo','juarez','maza','morelos','nonoalco-tlatelolco','obrera','otros','paseo-de-la-reforma','paulino-navarro','peralvillo','procuraduria-general-de-la-republica','roma-norte','roma-sur','san-rafael','san-simon-tolnahuac','santa-maria-insurgentes','santa-maria-la-ribera','tabacalera','transito','valle-gomez','vista-alegre']
 
 if URL == "https://inmuebles.mercadolibre.com.mx/renta/distrito-federal/cuauhtemoc/_Desde_49":   
     COLONIAS=['algarin','ampliacion-asturias','asturias','asturias-amp','atlampa','buenavista','buenos-aires','centro-de-la-ciudad-de-mexico-area-1','centro-de-la-ciudad-de-mexico-area-2','centro-de-la-ciudad-de-mexico-area-3','centro-de-la-ciudad-de-mexico-area-4','centro-de-la-ciudad-de-mexico-area-5','centro-de-la-ciudad-de-mexico-area-6','centro-de-la-ciudad-de-mexico-area-7','centro-de-la-ciudad-de-mexico-area-8','centro-de-la-ciudad-de-mexico-area-9','centro-de-recepcion-de-depositos-masivos-centro','centro-urbano-benito-juarez','condesa','cuauhtemoc/','doctores','esperanza','ex-hipodromo-de-peralvillo','felipe-pescador','guerrero','h-camara-de-senadores','hipodromo-condesa','hipodromo','juarez','maza','morelos','nonoalco-tlatelolco','obrera','otros','paseo-de-la-reforma','paulino-navarro','peralvillo','procuraduria-general-de-la-republica','roma-norte','roma-sur','san-rafael','san-simon-tolnahuac','santa-maria-insurgentes','santa-maria-la-ribera','tabacalera','transito','valle-gomez','vista-alegre']
@@ -505,18 +537,9 @@ if URL=="_Desde_49":
 
 
 
+ 
 
-#
-#
-#
-
-# Asigna formato de ejemplo1
-formato1 = "%Y-%m-%d %H_%M_%S"
-hoy = datetime.today()  # Asigna fecha-hora
-# Aplica formato ejemplo1
-hoy = hoy.strftime(formato1)  
-#print("File      Path:", Path(__file__).absolute())
-#print("Directory Path:", Path().absolute())  
+  
 path=str(Path().absolute())+"\\MERCADO_LIBRE_URL\\"
 if os.path.exists(path):
     pass
@@ -525,31 +548,72 @@ else:
     os.mkdir(path)
 
     
-path=str(Path().absolute())+"\\MERCADO_LIBRE_URL\\"+"URL_"+hoy
+
 
 print(path)
-if os.path.exists(path):
-    print("CARPETA YA EXISTIA Y NO LA CREA")
+ 
+ 
+ 
+contador=comienzo
+if os.path.exists(path+"\\"+miarchivo+".csv"):
+            print("ya EXISTE ARCHIVO " + str(path+"\\"+miarchivo+".csv"))
+            contador-=1
+            print("comienzo"+str(contador+1))
+            data = import_csv(path+"\\"+miarchivo+".csv")
+            #last_row = data
+             
+            
+            f= open(path+"\\"+miarchivo+".csv","a+") 
+            COLONIAS=COLONIAS[contador:]
+            print(str(len(COLONIAS))+" COLONIAS")
+            #print(COLONIAS)
+            #exit() 
+            for col in COLONIAS: 
+                
+                try:      
+                    cuerpo(URL,col,contador+1)
+                except:
+                    
+                    URL=URL.replace("_Desde_","/_Desde_")
+                    URL=URL.replace("//_","/_")
+                    
+                    cuerpo(URL,col,contador+1) 
+                
+                contador+=1                                                                                                                                                                              
+           
+            
 else:
-    print("CARPETA CREADA")
-    os.mkdir(path)
+            last_row="null"
+            print("no existe CREA CSV " + str(path+"\\"+miarchivo+".csv"))
+            f= open(path+"\\"+miarchivo+".csv","w+")
+                                                                                                                                                                                                
 
-f= open(path+"\\"+"URL_"+hoy+".csv","w+")
-        								                                                                                                                                			
-f.write("\"URL\","+"\"PRECIO\","+"\"TIPO\","+"\"CATEGORIA\","+"\"NOMBRE\","+"\"DESCRIPCION\","+"\"TERRENO\","+"\"CONSTRUIDOS\","+"\"BAÑOS\","+"\"ESTACIONAMIENTO\","+"\"RECAMARAS\","+"\"MEDIOS BAÑOS\","+"\"ANTIGÜEDAD\","+"\"CALLE\","+"\"COLONIA\","+"\"DELEGACION\","+"\"CIUDAD\","+"\"PUBLICADO\"\n")
-contador=1
-print(str(len(COLONIAS))+" COLONIAS")
-for col in COLONIAS: 
-    print(contador) 
-    contador+=1
-    try:      
-        cuerpo(URL,col)
-    except:
+            f.write("\"URL\","+"\"PRECIO\","+"\"TIPO\","+"\"CATEGORIA\","+"\"NOMBRE\","+"\"DESCRIPCION\","+"\"TERRENO\","+"\"CONSTRUIDOS\","+"\"BAÑOS\","+"\"ESTACIONAMIENTO\","+"\"RECAMARAS\","+"\"MEDIOS BAÑOS\","+"\"ANTIGÜEDAD\","+"\"CALLE\","+"\"COLONIA\","+"\"DELEGACION\","+"\"CIUDAD\","+"\"PUBLICADO\"\n")
+             
+            
+            
+            
+            print(str(len(COLONIAS))+" COLONIAS")
+            for col in COLONIAS: 
+                
+                try:      
+                    cuerpo(URL,col,contador)
+                except:
+                    
+                    URL=URL.replace("_Desde_","/_Desde_")
+                    URL=URL.replace("//_","/_")
+                    
+                    cuerpo(URL,col,contador)
+                 
+                contador+=1
+
          
-        URL=URL.replace("_Desde_","/_Desde_")
-        URL=URL.replace("//_","/_")
-        
-        cuerpo(URL,col)
+
+
+ 
+
+      								                                                                                                                                			
+
   
 f.close() 
 
