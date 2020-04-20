@@ -439,7 +439,7 @@ else:
     os.mkdir(path)
 
     
-path=str(Path().absolute())+"\\PROPIEDADES_COM_URL\\"+"URL_"+hoy
+path=str(Path().absolute())+"\\PROPIEDADES_COM_URL\\"
 
 print(path)
 if os.path.exists(path):

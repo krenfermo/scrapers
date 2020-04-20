@@ -41,7 +41,15 @@ def my_round(i):
 def navega_page(pagina):
     
     print(pagina)
-    headers = {'User-Agent': 'Mozilla/5.0'}
+    headers = {
+"Upgrade-Insecure-Requests":"1",
+"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+
+
+"Sec-Fetch-Dest":"document",
+ 
+"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36",
+}
     scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
     # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
     page =  scraper.get(pagina, headers=headers)
@@ -55,8 +63,19 @@ def navega_page(pagina):
 def navega_cada_pagina(pagina):
   
     print(pagina)
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    page = requests.get(pagina, headers=headers)
+    headers = {
+"Upgrade-Insecure-Requests":"1",
+"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+
+
+"Sec-Fetch-Dest":"document",
+ 
+"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36",
+}
+    scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
+    # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
+    page =  scraper.get(pagina, headers=headers)
+    
     soup = BeautifulSoup(page.content, 'html.parser')
     results = soup.find('div', class_='status-development card-container')
     
@@ -282,20 +301,19 @@ def venta(soup,pagina):
 
 
 def preventa(soup,pagina):
-  
+  try:
     precio = soup.find('span', class_='data-price')
     #print(precio.text.lstrip().rstrip())
     #f.write(precio.text.lstrip().rstrip()+"|")
     
-    f.write("\""+normalize(str(precio.text.lstrip().rstrip().replace("MN","")))+"\",")
-    f.write("\"Preventa\",")
+    
     
     file_catego="None"
     if "casa" in pagina:
         file_catego="Casas"
     elif "departamento" in pagina:
         file_catego="Departamento"
-    f.write(file_catego+",")
+
     
     nombre = soup.find('li', class_='bread-item current')
     #print(nombre.text.lstrip().rstrip())  
@@ -303,14 +321,15 @@ def preventa(soup,pagina):
     nombre=nombre.text.lstrip().rstrip()
     nombre=nombre.replace(",","")
     nombre=nombre.replace("\"","")
-    f.write("\""+normalize(str(nombre))+"\",")
+    
+
     
     Descripcion = soup.find('div', id='verDatosDescripcion')
     #print(Descripcion.text)
     #f.write(Descripcion.text+"|")
     Descripcion=Descripcion.text
     Descripcion=Descripcion.replace("\"","")
-    f.write("\""+normalize(str(Descripcion))+"\",")
+
     
     
     status = soup.find('div', class_='status-columns')
@@ -378,8 +397,10 @@ def preventa(soup,pagina):
             #f.write("\""+datos+"\",")
     
     items_data="\""+str(terreno)+"\","+"\""+str(construidos)+"\","+"\""+str(banios)+"\","+"\""+str(estacionamientos)+"\","+"\""+str(Recamaras)+"\","+"\""+str(Medios)+"\","+"\""+str(Antiguedad)+"\","
-    f.write(normalize(str(items_data)).replace("Recamaras","").replace("Recamara","").replace("Banos","").replace("Bano","").replace("Medios","").replace("Medio",""))
     
+    
+    
+              
     
     calle="None"
     colonia="None"
@@ -407,11 +428,21 @@ def preventa(soup,pagina):
         delegacion=location[2]
         ciudad=location[3]
         items_data2="\""+str(calle)+"\","+"\""+str(colonia)+"\","+"\""+str(delegacion)+"\","+"\""+str(ciudad)+"\","
+    
+    
+    f.write("\""+normalize(str(precio.text.lstrip().rstrip().replace("MN","")))+"\",")
+    f.write("\"Preventa\",")
+    f.write(file_catego+",")
+    f.write("\""+normalize(str(nombre))+"\",")
+    f.write("\""+normalize(str(Descripcion))+"\",")
+    f.write(normalize(str(items_data)).replace("Recamaras","").replace("Recamara","").replace("Banos","").replace("Bano","").replace("Medios","").replace("Medio",""))
+    
     f.write(normalize(str(items_data2)))
     
 
     f.write("\"None\"\n")
-    
+  except:
+     return False   
  
 
 def cuerpo(URL):
@@ -509,8 +540,7 @@ else:
      
     os.mkdir(path)
 
-    
-path=str(Path().absolute())+"\\INMUEBLES24_URL\\"+"URL_"+hoy
+ 
 
 print(path)
 if os.path.exists(path):

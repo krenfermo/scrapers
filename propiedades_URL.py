@@ -7,8 +7,8 @@ import os
 
 from datetime import datetime
 from pathlib import Path
-#import cloudscraper
-
+import cloudscraper
+import csv 
 
 
 def my_round(i):
@@ -17,7 +17,6 @@ def my_round(i):
 
 def navega_page(pagina):
      
-    
     print(pagina)
     #headers = {'User-Agent': 'Mozilla/5.0'}
     headers = {
@@ -30,11 +29,8 @@ def navega_page(pagina):
 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36",
 }
 
-# Returns a requests.models.Response object
-    #scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
-    # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
-    #page =  scraper.get(URL, headers=headers)
-    page = requests.get(pagina, headers=headers)
+ 
+    page = requests.get(URL, headers=headers)
     soup = BeautifulSoup(page.content, 'html.parser')
     results = soup.find('div', class_='content-result cont-search-list')
     #elements = results.select('div[class*="posting-card"]')
@@ -58,10 +54,8 @@ def navega_cada_pagina(pagina):
  
 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36",
 }
-    #scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
-    # Or: scraper = cloudscraper.CloudScraper()  # CloudScraper inherits from requests.Session
-    #page =  scraper.get(URL, headers=headers)
-    page = requests.get(pagina, headers=headers)
+   
+    page = requests.get(URL, headers=headers)
     soup = BeautifulSoup(page.content, 'html.parser')
     OPERACION(soup,pagina)
      
@@ -93,8 +87,8 @@ def normalize(s):
 
 def OPERACION(soup,pagina):
     try:
-         
         precio = soup.find('span', class_='price')
+        
         precio=precio.text.replace("$","")
         
         if "MDP" in str(precio):
@@ -113,10 +107,9 @@ def OPERACION(soup,pagina):
             precio=precio[0]
             precio= float(precio)*(1000)
             precio="{:.0f}".format(precio)
-            
-            
+     
+        
     except:
-        print("error")
         return False
     
     operation="None"
@@ -138,7 +131,6 @@ def OPERACION(soup,pagina):
         file_catego="terreno"
     elif "bodega" in pagina:
             file_catego="bodega"
- 
             
 
     
@@ -201,45 +193,37 @@ def OPERACION(soup,pagina):
             
             Descripcion=Descripcion.replace(a,"").replace(b,"").replace(c,"").replace("!","").replace("¡","").replace("\"","")
             #print(Descripcion)
+            f.write("\""+pagina.lstrip().rstrip()+"\",")
+            f.write("\""+str(precio)+"\",")
+            f.write("\""+operation+"\",")
+            if "casa" in Descripcion or "casa" in nombre:
+                file_catego="Casa"
+            elif "departamento" in Descripcion or "departamento" in nombre:
+                file_catego="Departamento"
+            elif "depto" in Descripcion or "depto" in nombre:
+                file_catego="Departamento"
+            elif "Depto" in Descripcion or "Depto" in nombre:
+                file_catego="Departamento"
+                
+            f.write("\""+file_catego+"\",")
+            
+            
+            f.write("\""+normalize(str(nombre))+"\",")
+            
+            
             try:
+                    
                     Descripcion=normalize(str(Descripcion))
-                    f.write("\""+pagina.lstrip().rstrip()+"\",")
-                    
-                    f.write("\""+str(precio)+"\",")
-                    
-                    f.write("\""+operation+"\",")
-                    
-                    if "casa" in Descripcion or "casa" in nombre:
-                        file_catego="Casa"
-                    elif "departamento" in Descripcion or "departamento" in nombre:
-                        file_catego="Departamento"
-                    elif "depto" in Descripcion or "depto" in nombre:
-                        file_catego="Departamento"
-                    elif "Depto" in Descripcion or "Depto" in nombre:
-                        file_catego="Departamento"
-                        
-                    f.write("\""+file_catego+"\",")
-                    f.write("\""+normalize(str(nombre))+"\",")
                     f.write("\""+Descripcion+"\",")
             except:
-                bandera=True    
+                    Descripcion="None"
+        
+                    f.write("\""+Descripcion+"\",") 
             break
     
     
-    if bandera   :
-        Descripcion="None"
-        if "casa" in Descripcion or "casa" in nombre:
-            file_catego="Casa"
-        elif "departamento" in Descripcion or "departamento" in nombre:
-            file_catego="Departamento"
-        elif "depto" in Descripcion or "depto" in nombre:
-            file_catego="Departamento"
-        elif "Depto" in Descripcion or "Depto" in nombre:
-            file_catego="Departamento"
-            
-        f.write("\""+file_catego+"\",")
-        f.write("\""+normalize(str(nombre))+"\",")
-        f.write("\""+Descripcion+"\",")
+ 
+
          
    
     
@@ -367,7 +351,7 @@ def cuerpo(URL):
              return False
         
         
-        for pages in range(1,Total_pages+1) :
+        for pages in range(comienzo,Total_pages+1) :
             list_url=list()
             URL2=URL
             URL2=URL2+"?pagina="+str(pages)
@@ -402,20 +386,41 @@ def cuerpo(URL):
                  
          
             for item in list_url:
-                #scraper = cloudscraper.create_scraper() 
+               
                 navega_cada_pagina(item)
+
+
+
+def import_csv(csvfilename):
+    data = []
+    with open(csvfilename, "r", encoding="utf-8", errors="ignore") as scraped:
+        print(csvfilename)
+        reader = csv.reader(scraped, delimiter=',')
+        row_index=1
+        for row in reader:
+            if row:  # avoid blank lines
+                row_index += 1
+                try: 
+                    columns = [row[0]]
+                    data.append(columns)
+                except:
+                    continue
+    f = open(csvfilename, "r+")
+    lines = f.readlines()
+    lines.pop()
+    f = open(csvfilename, "w+")
+    f.writelines(lines)
+    return data
 
 #python3 scrap_uno.py "comprar" "departamento" "narvarte"
 
-#operation=["en-venta-","en-renta-","desarrollos-","oficinas-","en-temporal-vacacional-","en-venta-incluir-comercializa-remates-publisher-"]
-#categories=["departamentos-","casas-o-duplex-o-casa-en-condominio-","casa-en-condominio-","oficinas-","locales-comerciales-","bodegas-comerciales-","terrenos-","otros-tipos-de-propiedades-"]
- 
-        
+      
 URL=sys.argv[1]
-    
+miarchivo=str(sys.argv[2])
+comienzo=int(sys.argv[3])
     
 # Asigna formato de ejemplo1
-formato1 = "%Y-%m-%d %H_%M_%S"
+formato1 = "%Y-%m-%d"
 hoy = datetime.today()  # Asigna fecha-hora
 # Aplica formato ejemplo1
 hoy = hoy.strftime(formato1)  
@@ -429,7 +434,7 @@ else:
     os.mkdir(path)
 
     
-path=str(Path().absolute())+"\\PROPIEDADES_COM_URL\\"+"URL_"+hoy
+#path=str(Path().absolute())+"\\PROPIEDADES_COM_URL\\"
 
 print(path)
 if os.path.exists(path):
@@ -439,15 +444,34 @@ else:
     os.mkdir(path)
 
 
-f= open(path+"\\"+"URL_"+hoy+".csv","w+")
-        								                                                                                                                                			
+
+if os.path.exists(path+"\\"+miarchivo+".csv"):
+            print("ya EXISTE ARCHIVO " + str(path+"\\"+miarchivo+".csv"))
+           
+            data = import_csv(path+"\\"+miarchivo+".csv")
+            #last_row = data[-1]
+            #print()
+            
+            #exit() 
+            f= open(path+"\\"+miarchivo+".csv","a+") 
+            cuerpo(URL)                                                                                                                                                                                  
+           
+            
+else:
+            last_row="null"
+            print("no existe CREA CSV " + str(path+"\\"+miarchivo+".csv"))
+            f= open(path+"\\"+miarchivo+".csv","w+")
+                                                                                                                                                                                                
+
+            f.write("\"URL\","+"\"PRECIO\","+"\"TIPO\","+"\"CATEGORIA\","+"\"NOMBRE\","+"\"DESCRIPCION\","+"\"TERRENO\","+"\"CONSTRUIDOS\","+"\"BAÑOS\","+"\"ESTACIONAMIENTO\","+"\"RECAMARAS\","+"\"MEDIOS BAÑOS\","+"\"ANTIGÜEDAD\","+"\"CALLE\","+"\"COLONIA\","+"\"DELEGACION\","+"\"CIUDAD\","+"\"PUBLICADO\"\n")
+            cuerpo(URL)
+
+         
 
 
-f.write("\"URL\","+"\"PRECIO\","+"\"TIPO\","+"\"CATEGORIA\","+"\"NOMBRE\","+"\"DESCRIPCION\","+"\"TERRENO\","+"\"CONSTRUIDOS\","+"\"BAÑOS\","+"\"ESTACIONAMIENTO\","+"\"RECAMARAS\","+"\"MEDIOS BAÑOS\","+"\"ANTIGÜEDAD\","+"\"CALLE\","+"\"COLONIA\","+"\"DELEGACION\","+"\"CIUDAD\","+"\"PUBLICADO\"\n")
+ 
 
 
-
-cuerpo(URL)
 
 f.close() 
 
